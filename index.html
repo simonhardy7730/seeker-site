@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Seeker — Alertez vos proches avant qu'il ne soit trop tard</title>
+<meta name="description" content="Seeker déclenche une alerte discrète vers vos proches et partage votre position pendant 1h, sans sortir votre téléphone. Bientôt en Belgique et en France." />
+<link rel="icon" type="image/png" href="assets/logo-512.png" />
+<link rel="apple-touch-icon" href="assets/logo-512.png" />
+<style>
+  :root{
+    --navy-950:#070c14;
+    --navy-900:#0a1120;
+    --navy-800:#101a2e;
+    --navy-700:#1a2740;
+    --hairline:rgba(201,169,97,0.22);
+    --gold:#c9a961;
+    --gold-bright:#e4c77a;
+    --silver:#aab3c2;
+    --ink:#eef1f6;
+    --ink-dim:#8b93a3;
+    --mono: "IBM Plex Mono","SF Mono",ui-monospace,Menlo,monospace;
+    --serif: "Iowan Old Style","Georgia","Times New Roman",serif;
+    --sans: "Inter","Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:var(--navy-950)}
+  body{
+    background:var(--navy-950);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0);
+    background-size:26px 26px;
+    pointer-events:none;
+    z-index:0;
+  }
+  a{color:inherit}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
+  .label{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--gold);
+  }
+  /* ---------- NAV ---------- */
+  header{
+    border-bottom:1px solid var(--hairline);
+    position:relative; z-index:2;
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 0;
+  }
+  .brand{
+    font-family:var(--serif);
+    font-size:21px;
+    letter-spacing:0.04em;
+    display:flex; align-items:center; gap:10px;
+  }
+  .brand .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--gold);
+    box-shadow:0 0 0 3px rgba(201,169,97,0.18), 0 0 14px rgba(201,169,97,0.7);
+  }
+  .navlinks{display:flex; gap:36px; font-size:13px; color:var(--ink-dim)}
+  .navlinks a{text-decoration:none; letter-spacing:0.02em}
+  .navlinks a:hover{color:var(--ink)}
+  .nav-cta{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.08em;
+    color:var(--navy-950); background:var(--gold);
+    padding:9px 18px; text-decoration:none; text-transform:uppercase;
+  }
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:96px 0 110px;
+    display:grid; grid-template-columns:1.15fr 0.85fr; gap:60px;
+    border-bottom:1px solid var(--hairline);
+    position:relative;
+  }
+  .hero h1{
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:clamp(40px,5.4vw,68px);
+    line-height:1.06;
+    letter-spacing:-0.01em;
+    margin:22px 0 26px;
+  }
+  .hero h1 em{ color:var(--gold-bright); font-style:normal; }
+  .hero p.lede{
+    font-size:17px; color:var(--silver); max-width:480px; margin-bottom:34px;
+  }
+  .cta-row{display:flex; gap:16px; align-items:center; flex-wrap:wrap}
+  .btn-primary{
+    font-family:var(--mono); font-size:13px; letter-spacing:0.06em;
+    text-transform:uppercase; text-decoration:none;
+    background:var(--gold); color:var(--navy-950);
+    padding:15px 28px; display:inline-block;
+    border:1px solid var(--gold);
+  }
+  .btn-ghost{
+    font-family:var(--mono); font-size:13px; letter-spacing:0.06em;
+    text-transform:uppercase; text-decoration:none;
+    color:var(--ink); padding:15px 24px; display:inline-block;
+    border:1px solid var(--hairline);
+  }
+  .hero-panel{
+    border:1px solid var(--hairline);
+    background:linear-gradient(180deg, var(--navy-900), var(--navy-800));
+    padding:28px;
+    position:relative;
+    align-self:start;
+  }
+  .hero-panel .status-line{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--mono); font-size:11px; color:var(--ink-dim);
+    padding-bottom:16px; border-bottom:1px solid var(--hairline); margin-bottom:18px;
+    letter-spacing:0.05em;
+  }
+  .pulse{width:8px;height:8px;border-radius:50%;background:var(--gold-bright); box-shadow:0 0 0 0 rgba(228,199,122,0.6); animation:pulse 1.8s infinite}
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(228,199,122,0.55)}
+    70%{box-shadow:0 0 0 9px rgba(228,199,122,0)}
+    100%{box-shadow:0 0 0 0 rgba(228,199,122,0)}
+  }
+  .metric{display:flex; justify-content:space-between; padding:13px 0; border-bottom:1px solid rgba(255,255,255,0.06); font-size:13px}
+  .metric:last-child{border-bottom:none}
+  .metric .k{color:var(--ink-dim)}
+  .metric .v{font-family:var(--mono); color:var(--ink)}
+  .metric .v.gold{color:var(--gold-bright)}
+  /* ---------- SECTIONS ---------- */
+  section{padding:88px 0; border-bottom:1px solid var(--hairline)}
+  .section-head{display:grid; grid-template-columns:280px 1fr; gap:40px; margin-bottom:56px}
+  .section-head h2{
+    font-family:var(--serif); font-weight:400; font-size:34px; line-height:1.15;
+  }
+  .section-head .desc{color:var(--silver); font-size:15px; max-width:520px; align-self:end}
+  /* problem */
+  .problem-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--hairline); border:1px solid var(--hairline)}
+  .problem-card{background:var(--navy-950); padding:30px 26px}
+  .problem-card .n{font-family:var(--mono); color:var(--gold); font-size:12px; letter-spacing:0.1em}
+  .problem-card h3{font-family:var(--serif); font-weight:400; font-size:20px; margin:14px 0 10px}
+  .problem-card p{font-size:14px; color:var(--ink-dim)}
+  /* how it works */
+  .steps{list-style:none; counter-reset:step}
+  .step{
+    display:grid; grid-template-columns:90px 1fr; gap:24px;
+    padding:30px 0; border-top:1px solid var(--hairline);
+    counter-increment:step;
+  }
+  .step:first-child{border-top:1px solid var(--hairline)}
+  .step .num{
+    font-family:var(--serif); font-size:44px; color:transparent;
+    -webkit-text-stroke:1px var(--gold); text-stroke:1px var(--gold);
+  }
+  .step h3{font-size:18px; font-weight:600; margin-bottom:8px}
+  .step p{color:var(--ink-dim); font-size:14.5px; max-width:640px}
+  .step .tag{font-family:var(--mono); font-size:10.5px; color:var(--gold); letter-spacing:0.08em; text-transform:uppercase; margin-left:10px}
+  /* trust */
+  .trust-row{display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:1px solid var(--hairline)}
+  .trust-item{padding:26px 22px; border-right:1px solid var(--hairline)}
+  .trust-item:last-child{border-right:none}
+  .trust-item .label{margin-bottom:10px; display:block}
+  .trust-item p{font-size:13.5px; color:var(--ink-dim)}
+  /* waitlist */
+  .waitlist{
+    display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center;
+  }
+  .waitlist h2{font-family:var(--serif); font-weight:400; font-size:36px; line-height:1.15; margin-bottom:16px}
+  .waitlist p{color:var(--silver); font-size:15px; margin-bottom:0}
+  form{border:1px solid var(--hairline); padding:26px}
+  form .row{display:flex; border-bottom:1px solid var(--hairline)}
+  form input[type=email]{
+    flex:1; background:transparent; border:none; outline:none;
+    color:var(--ink); font-family:var(--sans); font-size:15px; padding:16px 4px;
+  }
+  form input::placeholder{color:var(--ink-dim)}
+  form button{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.08em; text-transform:uppercase;
+    background:var(--gold); color:var(--navy-950); border:none; padding:0 22px; cursor:pointer;
+  }
+  form .fine{font-size:11.5px; color:var(--ink-dim); margin-top:14px; font-family:var(--mono); letter-spacing:0.02em}
+  footer{padding:36px 0; display:flex; justify-content:space-between; font-size:12px; color:var(--ink-dim)}
+  footer .label{margin-bottom:0}
+  @media (max-width:860px){
+    .hero{grid-template-columns:1fr; padding:64px 0 72px}
+    .section-head{grid-template-columns:1fr; gap:16px}
+    .problem-grid{grid-template-columns:1fr}
+    .trust-row{grid-template-columns:1fr 1fr}
+    .waitlist{grid-template-columns:1fr; gap:30px}
+    .navlinks{display:none}
+    .step{grid-template-columns:56px 1fr}
+    .step .num{font-size:32px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <nav>
+      <div class="brand"><img src="assets/logo-512.png" alt="" style="width:30px;height:30px" />SEEKER</div>
+      <div class="navlinks">
+        <a href="#probleme">Le problème</a>
+        <a href="#fonctionnement">Fonctionnement</a>
+        <a href="#confiance">Confidentialité</a>
+      </div>
+      <a class="nav-cta" href="#liste">Rejoindre la liste</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap hero">
+  <div>
+    <span class="label">Belgique · France — bientôt disponible</span>
+    <h1>Alertez vos proches<br><em>avant</em> qu'il ne soit trop tard.</h1>
+    <p class="lede">Seeker envoie une alerte silencieuse à vos contacts de confiance et partage votre position pendant une heure — sans sortir votre téléphone, sans que personne autour de vous ne le remarque.</p>
+    <div class="cta-row">
+      <a class="btn-primary" href="#liste">Être averti au lancement</a>
+      <a class="btn-ghost" href="#fonctionnement">Comment ça marche →</a>
+    </div>
+  </div>
+  <div class="hero-panel">
+    <div class="status-line"><span><span class="pulse" style="display:inline-block;margin-right:8px;vertical-align:middle"></span>ALERTE ACTIVE</span><span>00:47:12</span></div>
+    <div class="metric"><span class="k">Déclenchement</span><span class="v gold">Discret — Back Tap</span></div>
+    <div class="metric"><span class="k">Contacts de confiance</span><span class="v">1 à 5</span></div>
+    <div class="metric"><span class="k">Position partagée</span><span class="v">Mise à jour · 8s</span></div>
+    <div class="metric"><span class="k">Mode trajet</span><span class="v gold">Veille automatique</span></div>
+    <div class="metric"><span class="k">Durée restante</span><span class="v">47 min</span></div>
+  </div>
+</div>
+
+<section id="probleme">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="label">Le constat</span>
+      <h2>Le seul bouton d'urgence que vous avez déjà est fait pour appeler les secours — pas vos proches.</h2>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <span class="n">01</span>
+        <h3>Le SOS natif est un appel, pas une alerte</h3>
+        <p>Le bouton SOS de votre iPhone ou Android compose le numéro d'urgence. Utile en cas d'urgence médicale — inadapté quand le danger est social, ambigu, ou que vous n'êtes pas encore sûr·e.</p>
+      </div>
+      <div class="problem-card">
+        <span class="n">02</span>
+        <h3>Sortir son téléphone, c'est déjà trop</h3>
+        <p>Dans la majorité des situations à risque, dégainer son téléphone attire l'attention au moment précis où il ne faut pas.</p>
+      </div>
+      <div class="problem-card">
+        <span class="n">03</span>
+        <h3>Les proches ne savent jamais où vous êtes</h3>
+        <p>Un appel manqué, un message ambigu — et personne ne sait s'il faut s'inquiéter, ni où chercher.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="fonctionnement">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="label">Fonctionnement</span>
+      <h2>Trois gestes possibles. Un seul résultat : vos proches savent, et savent où.</h2>
+    </div>
+    <ul class="steps">
+      <li class="step">
+        <span class="num">1</span>
+        <div>
+          <h3>Déclenchement discret <span class="tag">Sans sortir le téléphone</span></h3>
+          <p>Double toucher au dos du téléphone, tag NFC sur votre porte-clés, ou appui long sur l'Action Button — configuré une fois à l'installation, utilisable téléphone en poche.</p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="num">2</span>
+        <div>
+          <h3>Alerte immédiate à vos contacts de confiance</h3>
+          <p>Vos proches choisis reçoivent une notification et votre position en temps réel — pendant que votre écran affiche une interface neutre, comme si de rien n'était.</p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="num">3</span>
+        <div>
+          <h3>Suivi pendant 1 heure, prolongeable</h3>
+          <p>Votre position est partagée en direct pendant 60 minutes, prolongeable si besoin. Et avec le mode trajet, l'alerte part toute seule si vous ne confirmez pas votre arrivée à l'heure prévue.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section id="confiance">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="label">Confidentialité &amp; limites</span>
+      <h2>Ce que Seeker fait — et ce qu'il ne prétend pas faire.</h2>
+    </div>
+    <div class="trust-row">
+      <div class="trust-item">
+        <span class="label">Ne remplace pas le 112</span>
+        <p>Seeker alerte vos proches, pas les secours. En danger immédiat, composez toujours le 112.</p>
+      </div>
+      <div class="trust-item">
+        <span class="label">Données chiffrées</span>
+        <p>Votre position est chiffrée en transit et au repos, hébergée dans l'UE.</p>
+      </div>
+      <div class="trust-item">
+        <span class="label">Effacement automatique</span>
+        <p>La localisation est supprimée après la fenêtre d'alerte, sauf demande explicite de conservation.</p>
+      </div>
+      <div class="trust-item">
+        <span class="label">Déclenchement volontaire</span>
+        <p>Aucune écoute ni suivi en dehors d'une alerte que vous déclenchez vous-même.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="liste" style="border-bottom:none">
+  <div class="wrap waitlist">
+    <div>
+      <span class="label">Accès anticipé</span>
+      <h2>On construit Seeker avec les premières personnes qui s'inscrivent.</h2>
+      <p>Aucun spam. Une poignée d'emails avant le lancement en Belgique, et la possibilité de participer aux premiers tests.</p>
+    </div>
+    <form id="waitlist-form">
+      <div class="row">
+        <input id="waitlist-email" type="email" placeholder="vous@exemple.com" required />
+        <button type="submit">Rejoindre</button>
+      </div>
+      <div class="fine" id="waitlist-fine">Aucun spam. Lancement — Belgique francophone, puis France.</div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; width:100%">
+    <span class="label">SEEKER © 2026</span>
+    <span>Bruxelles, Belgique</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var SB = 'https://sznrgcorgirmngcraggj.supabase.co';
+  var KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6bnJnY29yZ2lybW5nY3JhZ2dqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ2ODU3MDIsImV4cCI6MjEwMDI2MTcwMn0.vjZ5muRNNIR2gpv9ePNdV4uWMjWZn0lePiiG4XLTwl8';
+  var form = document.getElementById('waitlist-form');
+  var email = document.getElementById('waitlist-email');
+  var fine = document.getElementById('waitlist-fine');
+  var btn = form.querySelector('button');
+
+  function setMsg(m, err) { fine.textContent = m; fine.style.color = err ? '#e4c77a' : ''; }
+  function done(msg) {
+    form.innerHTML =
+      '<div style="padding:8px 4px">' +
+      '<div style="font-family:var(--serif);font-size:22px;color:var(--gold-bright);margin-bottom:6px">Merci ✓</div>' +
+      '<div style="color:var(--silver);font-size:14px">' +
+      (msg || 'Vous êtes sur la liste. On vous prévient au lancement.') + '</div></div>';
+  }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var addr = (email.value || '').trim().toLowerCase();
+    if (!addr || addr.indexOf('@') < 1 || addr.lastIndexOf('.') < addr.indexOf('@')) {
+      setMsg('Adresse e-mail invalide.', true); return;
+    }
+    var old = btn.textContent; btn.disabled = true; btn.textContent = '…';
+    try {
+      var res = await fetch(SB + '/rest/v1/waitlist', {
+        method: 'POST',
+        headers: {
+          'apikey': KEY, 'Authorization': 'Bearer ' + KEY,
+          'Content-Type': 'application/json', 'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ email: addr, source: 'landing' })
+      });
+      if (res.ok) { done(); }
+      else if (res.status === 409) { done('Vous êtes déjà sur la liste — merci !'); }
+      else { setMsg('Oups, réessayez dans un instant.', true); btn.disabled = false; btn.textContent = old; }
+    } catch (err) {
+      setMsg('Connexion impossible. Réessayez.', true); btn.disabled = false; btn.textContent = old;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
