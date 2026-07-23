@@ -4,27 +4,36 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Seeker — Alertez vos proches avant qu'il ne soit trop tard</title>
-<meta name="description" content="Seeker déclenche une alerte discrète vers vos proches et partage votre position pendant 1h, sans sortir votre téléphone. Bientôt en Belgique et en France." />
+<meta name="description" content="Seeker déclenche une alerte discrète vers vos proches et partage votre position pendant 1 h, sans sortir votre téléphone. Bientôt en Belgique et en France." />
 <link rel="icon" type="image/png" href="assets/logo-512.png" />
 <link rel="apple-touch-icon" href="assets/logo-512.png" />
+<meta property="og:title" content="Seeker — Vos proches savent. Et savent où." />
+<meta property="og:description" content="Une alerte discrète à vos proches et votre position en direct, sans sortir votre téléphone." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<script>document.documentElement.classList.add('has-js');</script>
 <style>
   :root{
     --navy-950:#070c14;
     --navy-900:#0a1120;
+    --navy-850:#0d1626;
     --navy-800:#101a2e;
     --navy-700:#1a2740;
     --hairline:rgba(201,169,97,0.22);
+    --hairline-soft:rgba(255,255,255,0.07);
     --gold:#c9a961;
     --gold-bright:#e4c77a;
     --silver:#aab3c2;
     --ink:#eef1f6;
     --ink-dim:#8b93a3;
-    --mono: "IBM Plex Mono","SF Mono",ui-monospace,Menlo,monospace;
-    --serif: "Iowan Old Style","Georgia","Times New Roman",serif;
-    --sans: "Inter","Helvetica Neue",Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+    --serif:"Fraunces","Iowan Old Style",Georgia,serif;
+    --sans:"Inter","Helvetica Neue",Arial,sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{background:var(--navy-950)}
+  html{background:var(--navy-950);scroll-behavior:smooth}
   body{
     background:var(--navy-950);
     color:var(--ink);
@@ -33,172 +42,206 @@
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
   }
+  /* ambiance : grain + halo doré */
   body::before{
-    content:"";
-    position:fixed; inset:0;
-    background-image:
-      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0);
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0);
     background-size:26px 26px;
-    pointer-events:none;
-    z-index:0;
+  }
+  body::after{
+    content:"";position:fixed;top:-260px;left:50%;transform:translateX(-50%);
+    width:820px;height:620px;z-index:0;pointer-events:none;
+    background:radial-gradient(ellipse at center, rgba(201,169,97,0.16), transparent 62%);
+    filter:blur(20px);
   }
   a{color:inherit}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
   .label{
-    font-family:var(--mono);
-    font-size:11px;
-    letter-spacing:0.22em;
-    text-transform:uppercase;
-    color:var(--gold);
+    font-family:var(--mono);font-size:11px;letter-spacing:0.24em;
+    text-transform:uppercase;color:var(--gold);
   }
+  /* Animations d'apparition — uniquement si le JS tourne (sinon tout reste visible). */
+  .has-js .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease, transform .7s ease}
+  .has-js .reveal.in{opacity:1;transform:none}
+
   /* ---------- NAV ---------- */
   header{
+    position:sticky;top:0;z-index:20;
     border-bottom:1px solid var(--hairline);
-    position:relative; z-index:2;
+    background:rgba(7,12,20,0.72);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   }
-  nav{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:22px 0;
-  }
-  .brand{
-    font-family:var(--serif);
-    font-size:21px;
-    letter-spacing:0.04em;
-    display:flex; align-items:center; gap:10px;
-  }
-  .brand .dot{
-    width:7px;height:7px;border-radius:50%;
-    background:var(--gold);
-    box-shadow:0 0 0 3px rgba(201,169,97,0.18), 0 0 14px rgba(201,169,97,0.7);
-  }
-  .navlinks{display:flex; gap:36px; font-size:13px; color:var(--ink-dim)}
-  .navlinks a{text-decoration:none; letter-spacing:0.02em}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+  .brand{font-family:var(--serif);font-size:22px;letter-spacing:0.02em;display:flex;align-items:center;gap:11px}
+  .brand img{width:30px;height:30px}
+  .navlinks{display:flex;gap:34px;font-size:13.5px;color:var(--ink-dim)}
+  .navlinks a{text-decoration:none;letter-spacing:0.01em;transition:color .2s}
   .navlinks a:hover{color:var(--ink)}
   .nav-cta{
-    font-family:var(--mono); font-size:12px; letter-spacing:0.08em;
-    color:var(--navy-950); background:var(--gold);
-    padding:9px 18px; text-decoration:none; text-transform:uppercase;
+    font-family:var(--mono);font-size:12px;letter-spacing:0.08em;
+    color:var(--navy-950);background:var(--gold);
+    padding:10px 18px;text-decoration:none;text-transform:uppercase;
+    border-radius:2px;transition:background .2s, transform .2s;
   }
+  .nav-cta:hover{background:var(--gold-bright);transform:translateY(-1px)}
+
   /* ---------- HERO ---------- */
   .hero{
-    padding:96px 0 110px;
-    display:grid; grid-template-columns:1.15fr 0.85fr; gap:60px;
+    padding:104px 0 116px;
+    display:grid;grid-template-columns:1.12fr 0.88fr;gap:64px;align-items:center;
     border-bottom:1px solid var(--hairline);
-    position:relative;
   }
   .hero h1{
-    font-family:var(--serif);
-    font-weight:400;
-    font-size:clamp(40px,5.4vw,68px);
-    line-height:1.06;
-    letter-spacing:-0.01em;
-    margin:22px 0 26px;
+    font-family:var(--serif);font-weight:400;
+    font-size:clamp(42px,5.6vw,72px);line-height:1.02;
+    letter-spacing:-0.015em;margin:20px 0 24px;
   }
-  .hero h1 em{ color:var(--gold-bright); font-style:normal; }
-  .hero p.lede{
-    font-size:17px; color:var(--silver); max-width:480px; margin-bottom:34px;
-  }
-  .cta-row{display:flex; gap:16px; align-items:center; flex-wrap:wrap}
+  .hero h1 em{color:var(--gold-bright);font-style:italic}
+  .hero p.lede{font-size:17.5px;color:var(--silver);max-width:490px;margin-bottom:36px}
+  .cta-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
   .btn-primary{
-    font-family:var(--mono); font-size:13px; letter-spacing:0.06em;
-    text-transform:uppercase; text-decoration:none;
-    background:var(--gold); color:var(--navy-950);
-    padding:15px 28px; display:inline-block;
-    border:1px solid var(--gold);
+    font-family:var(--mono);font-size:13px;letter-spacing:0.06em;text-transform:uppercase;
+    text-decoration:none;background:var(--gold);color:var(--navy-950);
+    padding:16px 30px;display:inline-block;border:1px solid var(--gold);border-radius:2px;
+    transition:background .2s, transform .2s, box-shadow .2s;
   }
+  .btn-primary:hover{background:var(--gold-bright);transform:translateY(-2px);box-shadow:0 12px 30px rgba(201,169,97,0.25)}
   .btn-ghost{
-    font-family:var(--mono); font-size:13px; letter-spacing:0.06em;
-    text-transform:uppercase; text-decoration:none;
-    color:var(--ink); padding:15px 24px; display:inline-block;
-    border:1px solid var(--hairline);
+    font-family:var(--mono);font-size:13px;letter-spacing:0.06em;text-transform:uppercase;
+    text-decoration:none;color:var(--ink);padding:16px 24px;display:inline-block;
+    border:1px solid var(--hairline);border-radius:2px;transition:border-color .2s, background .2s;
   }
+  .btn-ghost:hover{border-color:var(--gold);background:rgba(201,169,97,0.06)}
+
+  /* panneau alerte (glass) */
   .hero-panel{
-    border:1px solid var(--hairline);
-    background:linear-gradient(180deg, var(--navy-900), var(--navy-800));
-    padding:28px;
-    position:relative;
-    align-self:start;
+    border:1px solid var(--hairline);border-radius:6px;
+    background:linear-gradient(180deg, rgba(16,26,46,0.92), rgba(10,17,32,0.92));
+    backdrop-filter:blur(8px);
+    padding:26px;position:relative;align-self:center;
+    box-shadow:0 30px 70px -30px rgba(0,0,0,0.8);
   }
-  .hero-panel .status-line{
-    display:flex; justify-content:space-between; align-items:center;
-    font-family:var(--mono); font-size:11px; color:var(--ink-dim);
-    padding-bottom:16px; border-bottom:1px solid var(--hairline); margin-bottom:18px;
-    letter-spacing:0.05em;
+  .status-line{
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:var(--mono);font-size:11px;color:var(--ink-dim);letter-spacing:0.05em;
+    padding-bottom:16px;border-bottom:1px solid var(--hairline);margin-bottom:8px;
   }
-  .pulse{width:8px;height:8px;border-radius:50%;background:var(--gold-bright); box-shadow:0 0 0 0 rgba(228,199,122,0.6); animation:pulse 1.8s infinite}
-  @keyframes pulse{
-    0%{box-shadow:0 0 0 0 rgba(228,199,122,0.55)}
-    70%{box-shadow:0 0 0 9px rgba(228,199,122,0)}
-    100%{box-shadow:0 0 0 0 rgba(228,199,122,0)}
-  }
-  .metric{display:flex; justify-content:space-between; padding:13px 0; border-bottom:1px solid rgba(255,255,255,0.06); font-size:13px}
+  .pulse{width:8px;height:8px;border-radius:50%;background:var(--gold-bright);display:inline-block;margin-right:8px;vertical-align:middle;
+    box-shadow:0 0 0 0 rgba(228,199,122,0.6);animation:pulse 1.9s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(228,199,122,0.55)}70%{box-shadow:0 0 0 10px rgba(228,199,122,0)}100%{box-shadow:0 0 0 0 rgba(228,199,122,0)}}
+  .metric{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--hairline-soft);font-size:13px}
   .metric:last-child{border-bottom:none}
   .metric .k{color:var(--ink-dim)}
-  .metric .v{font-family:var(--mono); color:var(--ink)}
+  .metric .v{font-family:var(--mono);color:var(--ink)}
   .metric .v.gold{color:var(--gold-bright)}
+
   /* ---------- SECTIONS ---------- */
-  section{padding:88px 0; border-bottom:1px solid var(--hairline)}
-  .section-head{display:grid; grid-template-columns:280px 1fr; gap:40px; margin-bottom:56px}
-  .section-head h2{
-    font-family:var(--serif); font-weight:400; font-size:34px; line-height:1.15;
-  }
-  .section-head .desc{color:var(--silver); font-size:15px; max-width:520px; align-self:end}
+  section{padding:96px 0;border-bottom:1px solid var(--hairline)}
+  .section-head{display:grid;grid-template-columns:280px 1fr;gap:44px;margin-bottom:60px}
+  .section-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(28px,3.4vw,38px);line-height:1.12;letter-spacing:-0.01em}
+  .section-head .desc{color:var(--silver);font-size:15px;max-width:520px;align-self:end}
+  .center-head{text-align:center;max-width:640px;margin:0 auto 56px}
+  .center-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(28px,3.4vw,40px);line-height:1.12;margin-top:14px;letter-spacing:-0.01em}
+  .center-head p{color:var(--silver);font-size:15px;margin-top:14px}
+
   /* problem */
-  .problem-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--hairline); border:1px solid var(--hairline)}
-  .problem-card{background:var(--navy-950); padding:30px 26px}
-  .problem-card .n{font-family:var(--mono); color:var(--gold); font-size:12px; letter-spacing:0.1em}
-  .problem-card h3{font-family:var(--serif); font-weight:400; font-size:20px; margin:14px 0 10px}
-  .problem-card p{font-size:14px; color:var(--ink-dim)}
-  /* how it works */
-  .steps{list-style:none; counter-reset:step}
-  .step{
-    display:grid; grid-template-columns:90px 1fr; gap:24px;
-    padding:30px 0; border-top:1px solid var(--hairline);
-    counter-increment:step;
+  .problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--hairline);border:1px solid var(--hairline);border-radius:6px;overflow:hidden}
+  .problem-card{background:var(--navy-950);padding:32px 26px;transition:background .25s}
+  .problem-card:hover{background:var(--navy-900)}
+  .problem-card .n{font-family:var(--mono);color:var(--gold);font-size:12px;letter-spacing:0.1em}
+  .problem-card h3{font-family:var(--serif);font-weight:400;font-size:21px;margin:14px 0 10px;line-height:1.2}
+  .problem-card p{font-size:14px;color:var(--ink-dim)}
+
+  /* how */
+  .steps{list-style:none}
+  .step{display:grid;grid-template-columns:96px 1fr;gap:26px;padding:32px 0;border-top:1px solid var(--hairline)}
+  .step .num{font-family:var(--serif);font-size:52px;color:transparent;-webkit-text-stroke:1px var(--gold)}
+  .step h3{font-size:18.5px;font-weight:600;margin-bottom:8px}
+  .step p{color:var(--ink-dim);font-size:14.5px;max-width:640px}
+  .step .tag{font-family:var(--mono);font-size:10.5px;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;margin-left:10px}
+
+  /* ---------- PRICING ---------- */
+  .toggle{display:flex;justify-content:center;margin-bottom:40px}
+  .toggle .switch{display:inline-flex;background:var(--navy-800);border:1px solid var(--hairline);border-radius:40px;padding:4px}
+  .toggle button{
+    font-family:var(--mono);font-size:12.5px;letter-spacing:0.04em;
+    border:none;background:transparent;color:var(--silver);cursor:pointer;
+    padding:9px 20px;border-radius:40px;transition:background .2s, color .2s;
   }
-  .step:first-child{border-top:1px solid var(--hairline)}
-  .step .num{
-    font-family:var(--serif); font-size:44px; color:transparent;
-    -webkit-text-stroke:1px var(--gold); text-stroke:1px var(--gold);
+  .toggle button.on{background:var(--gold);color:var(--navy-950);font-weight:600}
+  .toggle .save{color:var(--gold-bright)}
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
+  .plan{
+    border:1px solid var(--hairline);border-radius:8px;background:var(--navy-900);
+    padding:30px 26px;display:flex;flex-direction:column;position:relative;
+    transition:transform .25s, box-shadow .25s, border-color .25s;
   }
-  .step h3{font-size:18px; font-weight:600; margin-bottom:8px}
-  .step p{color:var(--ink-dim); font-size:14.5px; max-width:640px}
-  .step .tag{font-family:var(--mono); font-size:10.5px; color:var(--gold); letter-spacing:0.08em; text-transform:uppercase; margin-left:10px}
+  .plan:hover{transform:translateY(-4px);box-shadow:0 22px 50px -28px rgba(0,0,0,0.85)}
+  .plan.feature{
+    border-color:rgba(228,199,122,0.55);
+    background:linear-gradient(180deg, var(--navy-850), var(--navy-900));
+    box-shadow:0 0 0 1px rgba(228,199,122,0.15), 0 26px 60px -30px rgba(201,169,97,0.3);
+  }
+  .plan .badge{
+    position:absolute;top:-11px;left:26px;
+    font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:0.12em;
+    background:var(--gold);color:var(--navy-950);padding:5px 12px;border-radius:2px;
+  }
+  .plan .pname{font-family:var(--serif);font-size:24px;font-weight:400}
+  .plan.feature .pname{color:var(--gold-bright)}
+  .plan .ptag{font-size:13px;color:var(--ink-dim);margin-top:4px;min-height:20px}
+  .plan .price{font-family:var(--serif);font-size:40px;font-weight:400;margin:20px 0 2px;line-height:1}
+  .plan .price .per{font-family:var(--mono);font-size:14px;color:var(--ink-dim)}
+  .plan .permonth{font-family:var(--mono);font-size:11px;color:var(--gold);min-height:16px;letter-spacing:0.02em}
+  .plan ul{list-style:none;margin:22px 0 26px;flex:1}
+  .plan li{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--silver);padding:7px 0}
+  .plan li svg{flex:none;margin-top:3px}
+  .plan li.head{color:var(--ink);font-weight:600}
+  .plan .pcta{
+    font-family:var(--mono);font-size:12.5px;letter-spacing:0.06em;text-transform:uppercase;
+    text-align:center;text-decoration:none;padding:14px;border-radius:2px;
+    border:1px solid var(--hairline);color:var(--ink);transition:all .2s;
+  }
+  .plan .pcta:hover{border-color:var(--gold);background:rgba(201,169,97,0.07)}
+  .plan.feature .pcta{background:var(--gold);color:var(--navy-950);border-color:var(--gold)}
+  .plan.feature .pcta:hover{background:var(--gold-bright)}
+  .pricing-note{text-align:center;font-family:var(--mono);font-size:11px;color:var(--ink-dim);margin-top:34px;letter-spacing:0.02em}
+  .pricing-note b{color:var(--gold)}
+
   /* trust */
-  .trust-row{display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:1px solid var(--hairline)}
-  .trust-item{padding:26px 22px; border-right:1px solid var(--hairline)}
+  .trust-row{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--hairline);border-radius:6px;overflow:hidden}
+  .trust-item{padding:28px 22px;border-right:1px solid var(--hairline)}
   .trust-item:last-child{border-right:none}
-  .trust-item .label{margin-bottom:10px; display:block}
-  .trust-item p{font-size:13.5px; color:var(--ink-dim)}
+  .trust-item .label{margin-bottom:10px;display:block}
+  .trust-item p{font-size:13.5px;color:var(--ink-dim)}
+
   /* waitlist */
-  .waitlist{
-    display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center;
-  }
-  .waitlist h2{font-family:var(--serif); font-weight:400; font-size:36px; line-height:1.15; margin-bottom:16px}
-  .waitlist p{color:var(--silver); font-size:15px; margin-bottom:0}
-  form{border:1px solid var(--hairline); padding:26px}
-  form .row{display:flex; border-bottom:1px solid var(--hairline)}
-  form input[type=email]{
-    flex:1; background:transparent; border:none; outline:none;
-    color:var(--ink); font-family:var(--sans); font-size:15px; padding:16px 4px;
-  }
+  .waitlist{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+  .waitlist h2{font-family:var(--serif);font-weight:400;font-size:clamp(28px,3.4vw,40px);line-height:1.14;margin-bottom:16px;letter-spacing:-0.01em}
+  .waitlist p{color:var(--silver);font-size:15px}
+  form{border:1px solid var(--hairline);border-radius:6px;padding:28px;background:var(--navy-900)}
+  form .row{display:flex;border-bottom:1px solid var(--hairline)}
+  form input[type=email]{flex:1;background:transparent;border:none;outline:none;color:var(--ink);font-family:var(--sans);font-size:15px;padding:16px 4px}
   form input::placeholder{color:var(--ink-dim)}
-  form button{
-    font-family:var(--mono); font-size:12px; letter-spacing:0.08em; text-transform:uppercase;
-    background:var(--gold); color:var(--navy-950); border:none; padding:0 22px; cursor:pointer;
-  }
-  form .fine{font-size:11.5px; color:var(--ink-dim); margin-top:14px; font-family:var(--mono); letter-spacing:0.02em}
-  footer{padding:36px 0; display:flex; justify-content:space-between; font-size:12px; color:var(--ink-dim)}
-  footer .label{margin-bottom:0}
-  @media (max-width:860px){
-    .hero{grid-template-columns:1fr; padding:64px 0 72px}
-    .section-head{grid-template-columns:1fr; gap:16px}
+  form button{font-family:var(--mono);font-size:12px;letter-spacing:0.08em;text-transform:uppercase;background:var(--gold);color:var(--navy-950);border:none;padding:0 24px;cursor:pointer;border-radius:2px;transition:background .2s}
+  form button:hover{background:var(--gold-bright)}
+  form .fine{font-size:11.5px;color:var(--ink-dim);margin-top:14px;font-family:var(--mono);letter-spacing:0.02em}
+
+  footer{padding:40px 0}
+  footer .frow{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--ink-dim)}
+  footer .disclaimer{font-family:var(--mono);font-size:11px;color:var(--ink-dim);margin-top:18px;padding-top:18px;border-top:1px solid var(--hairline-soft)}
+
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr;padding:64px 0 76px;gap:44px}
+    .section-head{grid-template-columns:1fr;gap:16px}
     .problem-grid{grid-template-columns:1fr}
+    .plans{grid-template-columns:1fr}
     .trust-row{grid-template-columns:1fr 1fr}
-    .waitlist{grid-template-columns:1fr; gap:30px}
+    .waitlist{grid-template-columns:1fr;gap:30px}
     .navlinks{display:none}
-    .step{grid-template-columns:56px 1fr}
-    .step .num{font-size:32px}
+    .step{grid-template-columns:56px 1fr;gap:18px}
+    .step .num{font-size:36px}
+    section{padding:72px 0}
   }
 </style>
 </head>
@@ -207,10 +250,11 @@
 <header>
   <div class="wrap">
     <nav>
-      <div class="brand"><img src="assets/logo-512.png" alt="" style="width:30px;height:30px" />SEEKER</div>
+      <div class="brand"><img src="assets/logo-512.png" alt="" />Seeker</div>
       <div class="navlinks">
         <a href="#probleme">Le problème</a>
         <a href="#fonctionnement">Fonctionnement</a>
+        <a href="#tarifs">Tarifs</a>
         <a href="#confiance">Confidentialité</a>
       </div>
       <a class="nav-cta" href="#liste">Rejoindre la liste</a>
@@ -219,20 +263,20 @@
 </header>
 
 <div class="wrap hero">
-  <div>
+  <div class="reveal">
     <span class="label">Belgique · France — bientôt disponible</span>
-    <h1>Alertez vos proches<br><em>avant</em> qu'il ne soit trop tard.</h1>
+    <h1>Vos proches savent.<br>Et savent <em>où.</em></h1>
     <p class="lede">Seeker envoie une alerte silencieuse à vos contacts de confiance et partage votre position pendant une heure — sans sortir votre téléphone, sans que personne autour de vous ne le remarque.</p>
     <div class="cta-row">
       <a class="btn-primary" href="#liste">Être averti au lancement</a>
       <a class="btn-ghost" href="#fonctionnement">Comment ça marche →</a>
     </div>
   </div>
-  <div class="hero-panel">
-    <div class="status-line"><span><span class="pulse" style="display:inline-block;margin-right:8px;vertical-align:middle"></span>ALERTE ACTIVE</span><span>00:47:12</span></div>
+  <div class="hero-panel reveal">
+    <div class="status-line"><span><span class="pulse"></span>ALERTE ACTIVE</span><span>00:47:12</span></div>
     <div class="metric"><span class="k">Déclenchement</span><span class="v gold">Discret — Back Tap</span></div>
     <div class="metric"><span class="k">Contacts de confiance</span><span class="v">1 à 5</span></div>
-    <div class="metric"><span class="k">Position partagée</span><span class="v">Mise à jour · 8s</span></div>
+    <div class="metric"><span class="k">Position partagée</span><span class="v">En direct · 8 s</span></div>
     <div class="metric"><span class="k">Mode trajet</span><span class="v gold">Veille automatique</span></div>
     <div class="metric"><span class="k">Durée restante</span><span class="v">47 min</span></div>
   </div>
@@ -240,15 +284,15 @@
 
 <section id="probleme">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="label">Le constat</span>
-      <h2>Le seul bouton d'urgence que vous avez déjà est fait pour appeler les secours — pas vos proches.</h2>
+      <h2>Le seul bouton d'urgence que vous avez déjà appelle les secours — pas vos proches.</h2>
     </div>
-    <div class="problem-grid">
+    <div class="problem-grid reveal">
       <div class="problem-card">
         <span class="n">01</span>
         <h3>Le SOS natif est un appel, pas une alerte</h3>
-        <p>Le bouton SOS de votre iPhone ou Android compose le numéro d'urgence. Utile en cas d'urgence médicale — inadapté quand le danger est social, ambigu, ou que vous n'êtes pas encore sûr·e.</p>
+        <p>Le bouton SOS de votre téléphone compose le numéro d'urgence. Utile en cas d'urgence médicale — inadapté quand le danger est social, ambigu, ou que vous n'êtes pas encore sûr·e.</p>
       </div>
       <div class="problem-card">
         <span class="n">02</span>
@@ -266,58 +310,130 @@
 
 <section id="fonctionnement">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="label">Fonctionnement</span>
-      <h2>Trois gestes possibles. Un seul résultat : vos proches savent, et savent où.</h2>
+      <h2>Plusieurs gestes possibles. Un seul résultat : vos proches savent, et savent où.</h2>
     </div>
     <ul class="steps">
-      <li class="step">
+      <li class="step reveal">
         <span class="num">1</span>
         <div>
           <h3>Déclenchement discret <span class="tag">Sans sortir le téléphone</span></h3>
-          <p>Double toucher au dos du téléphone, tag NFC sur votre porte-clés, ou appui long sur l'Action Button — configuré une fois à l'installation, utilisable téléphone en poche.</p>
+          <p>Bouton Action, double toucher au dos, Siri ou tag NFC — configuré une fois à l'installation, utilisable téléphone en poche. À l'écran, une simple app météo comme si de rien n'était.</p>
         </div>
       </li>
-      <li class="step">
+      <li class="step reveal">
         <span class="num">2</span>
         <div>
-          <h3>Alerte immédiate à vos contacts de confiance</h3>
-          <p>Vos proches choisis reçoivent une notification et votre position en temps réel — pendant que votre écran affiche une interface neutre, comme si de rien n'était.</p>
+          <h3>Vos contacts de confiance sont prévenus</h3>
+          <p>Vos proches choisis reçoivent le lien de suivi et voient votre position en temps réel — pendant que votre écran reste neutre.</p>
         </div>
       </li>
-      <li class="step">
+      <li class="step reveal">
         <span class="num">3</span>
         <div>
           <h3>Suivi pendant 1 heure, prolongeable</h3>
-          <p>Votre position est partagée en direct pendant 60 minutes, prolongeable si besoin. Et avec le mode trajet, l'alerte part toute seule si vous ne confirmez pas votre arrivée à l'heure prévue.</p>
+          <p>Votre position est partagée en direct pendant 60 minutes, prolongeable si besoin, même écran verrouillé. Et avec le mode trajet, l'alerte part toute seule si vous ne confirmez pas votre arrivée à l'heure prévue.</p>
         </div>
       </li>
     </ul>
   </div>
 </section>
 
+<section id="tarifs">
+  <div class="wrap">
+    <div class="center-head reveal">
+      <span class="label">Tarifs</span>
+      <h2>Protéger vos proches est gratuit. Le premium, c'est plus de sérénité.</h2>
+      <p>Sans engagement, résiliable à tout moment. Deux mois offerts sur l'abonnement annuel.</p>
+    </div>
+
+    <div class="toggle reveal">
+      <div class="switch">
+        <button id="btn-monthly" onclick="setBilling('m')">Mensuel</button>
+        <button id="btn-annual" class="on" onclick="setBilling('a')">Annuel <span class="save">· −33%</span></button>
+      </div>
+    </div>
+
+    <div class="plans reveal">
+      <!-- Gratuit -->
+      <div class="plan">
+        <div class="pname">Gratuit</div>
+        <div class="ptag">Pour se protéger au quotidien.</div>
+        <div class="price">0 €</div>
+        <div class="permonth">Pour toujours</div>
+        <ul>
+          <li class="head">L'essentiel :</li>
+          <li>✓ Déclenchement discret (bouton, dos, Siri)</li>
+          <li>✓ 1 contact de confiance</li>
+          <li>✓ Suivi de position 60 min</li>
+          <li>✓ Écran leurre + faux appel</li>
+          <li>✓ Protéger vos proches — illimité</li>
+        </ul>
+        <a class="pcta" href="#liste">Commencer gratuitement</a>
+      </div>
+
+      <!-- Seeker+ -->
+      <div class="plan feature">
+        <span class="badge">POPULAIRE</span>
+        <div class="pname">Seeker+</div>
+        <div class="ptag">La protection complète.</div>
+        <div class="price"><span class="amount" data-m="4,99 €" data-a="39,99 €">39,99 €</span><span class="per" data-m="/mois" data-a="/an">/an</span></div>
+        <div class="permonth" data-permonth="soit 3,33 €/mois">soit 3,33 €/mois</div>
+        <ul>
+          <li class="head">Tout le gratuit, plus :</li>
+          <li>✓ Jusqu'à 5 contacts de confiance</li>
+          <li>✓ Mode trajet automatique</li>
+          <li>✓ Détection de chute</li>
+          <li>✓ Suivi prolongeable</li>
+          <li>✓ Historique des alertes</li>
+        </ul>
+        <a class="pcta" href="#liste">Choisir Seeker+</a>
+      </div>
+
+      <!-- Famille -->
+      <div class="plan">
+        <div class="pname">Famille</div>
+        <div class="ptag">Pour tout le cercle proche.</div>
+        <div class="price"><span class="amount" data-m="7,99 €" data-a="59,99 €">59,99 €</span><span class="per" data-m="/mois" data-a="/an">/an</span></div>
+        <div class="permonth" data-permonth="soit 5,00 €/mois">soit 5,00 €/mois</div>
+        <ul>
+          <li class="head">Tout Seeker+, pour 5 comptes :</li>
+          <li>✓ Couple, ados, parent âgé</li>
+          <li>✓ Un seul paiement</li>
+          <li>✓ Protection mutuelle du cercle</li>
+          <li>✓ Gestion simple des membres</li>
+        </ul>
+        <a class="pcta" href="#liste">Choisir Famille</a>
+      </div>
+    </div>
+
+    <p class="pricing-note">Paiement sécurisé via l'App Store et Google Play. <b>Prix de lancement</b> — les inscrit·e·s de la liste d'attente en profiteront en premier.</p>
+  </div>
+</section>
+
 <section id="confiance">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="label">Confidentialité &amp; limites</span>
       <h2>Ce que Seeker fait — et ce qu'il ne prétend pas faire.</h2>
     </div>
-    <div class="trust-row">
+    <div class="trust-row reveal">
       <div class="trust-item">
         <span class="label">Ne remplace pas le 112</span>
         <p>Seeker alerte vos proches, pas les secours. En danger immédiat, composez toujours le 112.</p>
       </div>
       <div class="trust-item">
         <span class="label">Données chiffrées</span>
-        <p>Votre position est chiffrée en transit et au repos, hébergée dans l'UE.</p>
+        <p>Votre position est chiffrée en transit et au repos, hébergée dans l'Union européenne.</p>
       </div>
       <div class="trust-item">
         <span class="label">Effacement automatique</span>
-        <p>La localisation est supprimée après la fenêtre d'alerte, sauf demande explicite de conservation.</p>
+        <p>La localisation est supprimée après la fenêtre d'alerte.</p>
       </div>
       <div class="trust-item">
         <span class="label">Déclenchement volontaire</span>
-        <p>Aucune écoute ni suivi en dehors d'une alerte que vous déclenchez vous-même.</p>
+        <p>Aucun suivi en dehors d'une alerte que vous déclenchez vous-même.</p>
       </div>
     </div>
   </div>
@@ -325,12 +441,12 @@
 
 <section id="liste" style="border-bottom:none">
   <div class="wrap waitlist">
-    <div>
+    <div class="reveal">
       <span class="label">Accès anticipé</span>
       <h2>On construit Seeker avec les premières personnes qui s'inscrivent.</h2>
-      <p>Aucun spam. Une poignée d'emails avant le lancement en Belgique, et la possibilité de participer aux premiers tests.</p>
+      <p>Aucun spam. Quelques e-mails avant le lancement en Belgique, l'accès aux premiers tests et le prix de lancement garanti.</p>
     </div>
-    <form id="waitlist-form">
+    <form id="waitlist-form" class="reveal">
       <div class="row">
         <input id="waitlist-email" type="email" placeholder="vous@exemple.com" required />
         <button type="submit">Rejoindre</button>
@@ -341,13 +457,41 @@
 </section>
 
 <footer>
-  <div class="wrap" style="display:flex; justify-content:space-between; width:100%">
-    <span class="label">SEEKER © 2026</span>
-    <span>Bruxelles, Belgique</span>
+  <div class="wrap">
+    <div class="frow">
+      <span class="brand" style="font-size:18px"><img src="assets/logo-512.png" alt="" style="width:22px;height:22px" />Seeker</span>
+      <span>Bruxelles, Belgique · © 2026</span>
+    </div>
+    <div class="wrap disclaimer" style="padding-left:0;padding-right:0">Seeker ne remplace pas les services d'urgence. En cas de danger immédiat, appelez le 112.</div>
   </div>
 </footer>
 
 <script>
+/* --- Bascule tarifs mensuel / annuel --- */
+function setBilling(mode){
+  var annual = mode === 'a';
+  document.getElementById('btn-annual').classList.toggle('on', annual);
+  document.getElementById('btn-monthly').classList.toggle('on', !annual);
+  document.querySelectorAll('.plan .amount').forEach(function(el){
+    el.textContent = annual ? el.dataset.a : el.dataset.m;
+  });
+  document.querySelectorAll('.plan .per').forEach(function(el){
+    el.textContent = annual ? el.dataset.a : el.dataset.m;
+  });
+  document.querySelectorAll('.plan .permonth[data-permonth]').forEach(function(el){
+    el.style.visibility = annual ? 'visible' : 'hidden';
+  });
+}
+
+/* --- Apparition au scroll --- */
+(function(){
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); } });
+  }, {threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(function(el){ obs.observe(el); });
+})();
+
+/* --- Inscription liste d'attente (Supabase) --- */
 (function () {
   var SB = 'https://sznrgcorgirmngcraggj.supabase.co';
   var KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6bnJnY29yZ2lybW5nY3JhZ2dqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ2ODU3MDIsImV4cCI6MjEwMDI2MTcwMn0.vjZ5muRNNIR2gpv9ePNdV4uWMjWZn0lePiiG4XLTwl8';
@@ -355,38 +499,29 @@
   var email = document.getElementById('waitlist-email');
   var fine = document.getElementById('waitlist-fine');
   var btn = form.querySelector('button');
-
-  function setMsg(m, err) { fine.textContent = m; fine.style.color = err ? '#e4c77a' : ''; }
-  function done(msg) {
+  function setMsg(m, err){ fine.textContent = m; fine.style.color = err ? '#e4c77a' : ''; }
+  function done(msg){
     form.innerHTML =
-      '<div style="padding:8px 4px">' +
-      '<div style="font-family:var(--serif);font-size:22px;color:var(--gold-bright);margin-bottom:6px">Merci ✓</div>' +
+      '<div style="padding:6px 2px">' +
+      '<div style="font-family:var(--serif);font-size:24px;color:var(--gold-bright);margin-bottom:6px">Merci ✓</div>' +
       '<div style="color:var(--silver);font-size:14px">' +
       (msg || 'Vous êtes sur la liste. On vous prévient au lancement.') + '</div></div>';
   }
-
-  form.addEventListener('submit', async function (e) {
+  form.addEventListener('submit', async function (e){
     e.preventDefault();
     var addr = (email.value || '').trim().toLowerCase();
-    if (!addr || addr.indexOf('@') < 1 || addr.lastIndexOf('.') < addr.indexOf('@')) {
-      setMsg('Adresse e-mail invalide.', true); return;
-    }
+    if(!addr || addr.indexOf('@') < 1 || addr.lastIndexOf('.') < addr.indexOf('@')){ setMsg('Adresse e-mail invalide.', true); return; }
     var old = btn.textContent; btn.disabled = true; btn.textContent = '…';
-    try {
+    try{
       var res = await fetch(SB + '/rest/v1/waitlist', {
-        method: 'POST',
-        headers: {
-          'apikey': KEY, 'Authorization': 'Bearer ' + KEY,
-          'Content-Type': 'application/json', 'Prefer': 'return=minimal'
-        },
-        body: JSON.stringify({ email: addr, source: 'landing' })
+        method:'POST',
+        headers:{ 'apikey':KEY, 'Authorization':'Bearer '+KEY, 'Content-Type':'application/json', 'Prefer':'return=minimal' },
+        body: JSON.stringify({ email: addr, source:'landing' })
       });
-      if (res.ok) { done(); }
-      else if (res.status === 409) { done('Vous êtes déjà sur la liste — merci !'); }
+      if(res.ok){ done(); }
+      else if(res.status === 409){ done('Vous êtes déjà sur la liste — merci !'); }
       else { setMsg('Oups, réessayez dans un instant.', true); btn.disabled = false; btn.textContent = old; }
-    } catch (err) {
-      setMsg('Connexion impossible. Réessayez.', true); btn.disabled = false; btn.textContent = old;
-    }
+    }catch(err){ setMsg('Connexion impossible. Réessayez.', true); btn.disabled = false; btn.textContent = old; }
   });
 })();
 </script>
