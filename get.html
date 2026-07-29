@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Télécharger Seeker</title>
+<link rel="icon" type="image/png" href="assets/logo-512.png" />
+<style>
+  :root{--navy-950:#070c14;--navy-900:#0a1120;--gold:#c9a961;--gold-bright:#e4c77a;--silver:#aab3c2;--ink:#eef1f6;--ink-dim:#8b93a3;--line:rgba(201,169,97,.22)}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:"Inter","Helvetica Neue",Arial,sans-serif}
+  body{background:var(--navy-950);color:var(--ink);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+    background-image:radial-gradient(circle at 50% 0%, rgba(201,169,97,.12), transparent 60%)}
+  .card{max-width:380px;width:100%;text-align:center}
+  .brand{display:inline-flex;align-items:center;gap:10px;font-family:Georgia,serif;font-size:26px;margin-bottom:6px}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 3px rgba(201,169,97,.18),0 0 14px rgba(201,169,97,.7)}
+  h1{font-family:Georgia,serif;font-weight:400;font-size:24px;margin:18px 0 8px}
+  p{color:var(--silver);font-size:14.5px;line-height:1.5;margin-bottom:24px}
+  a.btn{display:block;background:var(--gold);color:var(--navy-950);text-decoration:none;font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;letter-spacing:.05em;padding:15px;border-radius:6px;margin-bottom:12px}
+  a.ghost{display:block;color:var(--ink);border:1px solid var(--line);text-decoration:none;font-size:14px;padding:13px;border-radius:6px}
+  .note{color:var(--ink-dim);font-size:11.5px;font-family:"IBM Plex Mono",monospace;margin-top:20px}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand"><span class="dot"></span>Seeker</div>
+    <h1 id="title">Télécharger Seeker</h1>
+    <p id="sub">Vos proches savent. Et savent où.</p>
+    <div id="actions"></div>
+    <div class="note" id="note"></div>
+  </div>
+
+<script>
+/* ============================================================
+   À CHANGER AU LANCEMENT : coller ici les vraies URL des stores.
+   Tant qu'elles sont vides, mobile et desktop renvoient vers la
+   page d'accueil (liste d'attente). LE QR CODE NE CHANGE JAMAIS —
+   il pointe vers cette page, on ne modifie que ces 2 lignes.
+   ============================================================ */
+var IOS_URL = "";      // ex: https://apps.apple.com/app/idXXXXXXXXX
+var ANDROID_URL = "";  // ex: https://play.google.com/store/apps/details?id=be.seeker.app
+var SITE_URL = "./";   // page d'accueil / liste d'attente
+
+var ua = navigator.userAgent || "";
+var isIOS = /iPhone|iPad|iPod/i.test(ua);
+var isAndroid = /Android/i.test(ua);
+var target = SITE_URL;
+if (isIOS && IOS_URL) target = IOS_URL;
+else if (isAndroid && ANDROID_URL) target = ANDROID_URL;
+
+var actions = document.getElementById('actions');
+var note = document.getElementById('note');
+
+if (target !== SITE_URL) {
+  // App publiée : redirection automatique vers le bon store.
+  document.getElementById('sub').textContent = "Redirection vers le téléchargement…";
+  location.replace(target);
+} else {
+  // Pas encore publié : on invite à rejoindre la liste d'attente.
+  document.getElementById('title').textContent = "Bientôt disponible";
+  document.getElementById('sub').textContent = "Seeker arrive sur iPhone et Android. Laissez votre e-mail pour être prévenu·e au lancement.";
+  actions.innerHTML = '<a class="btn" href="' + SITE_URL + '">Être averti au lancement</a>';
+  note.textContent = "Belgique · France — lancement prochain";
+}
+</script>
+</body>
+</html>
