@@ -147,6 +147,23 @@
   .center-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(28px,3.4vw,40px);line-height:1.12;margin-top:14px;letter-spacing:-0.01em}
   .center-head p{color:var(--silver);font-size:15px;margin-top:14px}
 
+  /* ---------- DÉMO VIDÉO ---------- */
+  .demo{display:grid;grid-template-columns:300px 1fr;gap:52px;align-items:center;margin-bottom:64px}
+  .phone{
+    width:300px;border-radius:26px;overflow:hidden;position:relative;
+    border:1px solid var(--hairline);background:#0a1120;
+    box-shadow:0 28px 64px -30px rgba(20,26,43,0.28);
+  }
+  .phone video{display:block;width:100%;height:auto;background:#0a1120}
+  .demo-text h3{font-family:var(--serif);font-weight:400;font-size:clamp(24px,2.8vw,30px);line-height:1.16;margin-bottom:14px}
+  .demo-text p{color:var(--silver);font-size:15.5px;max-width:520px}
+  .demo-note{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold-deep);margin-top:18px}
+  @media(max-width:860px){
+    .demo{grid-template-columns:1fr;gap:28px;justify-items:center;text-align:center}
+    .phone{width:min(300px,82vw)}
+    .demo-text p{max-width:none}
+  }
+
   /* ---------- FONDATEURS / HISTOIRE ---------- */
   .story{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
   .story p{color:var(--silver);font-size:15.5px;margin-bottom:16px}
@@ -361,6 +378,19 @@
       <span class="label">Fonctionnement</span>
       <h2>Plusieurs gestes possibles. Un seul résultat : vos proches savent, et savent où.</h2>
     </div>
+
+    <div class="demo reveal">
+      <div class="phone">
+        <video src="assets/demo.mp4" muted loop autoplay playsinline preload="metadata" controls
+               aria-label="Démonstration de l'application Seeker"></video>
+      </div>
+      <div class="demo-text">
+        <h3>L'application, en treize secondes.</h3>
+        <p>Plutôt que de vous l'expliquer, on vous la montre. Ce sont de vraies captures : l'alerte en cours, la position de la personne qui s'affiche en direct sur une carte, et le lien que reçoivent ses proches. Rien n'est simulé.</p>
+        <div class="demo-note">Le son est coupé · touchez pour l'activer</div>
+      </div>
+    </div>
+
     <ul class="steps">
       <li class="step reveal">
         <span class="num">1</span>
