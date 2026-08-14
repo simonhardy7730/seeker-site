@@ -16,18 +16,21 @@
 <script>document.documentElement.classList.add('has-js');</script>
 <style>
   :root{
-    --navy-950:#070c14;
-    --navy-900:#0a1120;
-    --navy-850:#0d1626;
-    --navy-800:#101a2e;
-    --navy-700:#1a2740;
-    --hairline:rgba(201,169,97,0.22);
-    --hairline-soft:rgba(255,255,255,0.07);
+    --navy-950:#faf8f4;
+    --navy-900:#ffffff;
+    --navy-850:#f4f1ea;
+    --navy-800:#efebe1;
+    --navy-700:#e4ddcd;
+    --hairline:rgba(20,26,43,0.13);
+    --hairline-soft:rgba(20,26,43,0.07);
     --gold:#c9a961;
     --gold-bright:#e4c77a;
-    --silver:#aab3c2;
-    --ink:#eef1f6;
-    --ink-dim:#8b93a3;
+    --gold-deep:#8a6a1f;
+    --on-gold:#1a1408;
+    --navy-text:#141a2b;
+    --silver:#4e576a;
+    --ink:#141a2b;
+    --ink-dim:#616a7c;
     --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
     --serif:"Fraunces","Iowan Old Style",Georgia,serif;
     --sans:"Inter","Helvetica Neue",Arial,sans-serif;
@@ -45,20 +48,20 @@
   /* ambiance : grain + halo doré */
   body::before{
     content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
-    background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0);
+    background-image:radial-gradient(circle at 1px 1px, rgba(20,26,43,0.05) 1px, transparent 0);
     background-size:26px 26px;
   }
   body::after{
     content:"";position:fixed;top:-260px;left:50%;transform:translateX(-50%);
     width:820px;height:620px;z-index:0;pointer-events:none;
-    background:radial-gradient(ellipse at center, rgba(201,169,97,0.16), transparent 62%);
+    background:radial-gradient(ellipse at center, rgba(201,169,97,0.20), transparent 64%);
     filter:blur(20px);
   }
   a{color:inherit}
   .wrap{max-width:1140px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
   .label{
     font-family:var(--mono);font-size:11px;letter-spacing:0.24em;
-    text-transform:uppercase;color:var(--gold);
+    text-transform:uppercase;color:var(--gold-deep);
   }
   /* Animations d'apparition — uniquement si le JS tourne (sinon tout reste visible). */
   .has-js .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease, transform .7s ease}
@@ -68,7 +71,7 @@
   header{
     position:sticky;top:0;z-index:20;
     border-bottom:1px solid var(--hairline);
-    background:rgba(7,12,20,0.72);
+    background:rgba(250,248,244,0.86);
     backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   }
   nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
@@ -79,7 +82,7 @@
   .navlinks a:hover{color:var(--ink)}
   .nav-cta{
     font-family:var(--mono);font-size:12px;letter-spacing:0.08em;
-    color:var(--navy-950);background:var(--gold);
+    color:var(--on-gold);background:var(--gold);
     padding:10px 18px;text-decoration:none;text-transform:uppercase;
     border-radius:2px;transition:background .2s, transform .2s;
   }
@@ -96,16 +99,16 @@
     font-size:clamp(42px,5.6vw,72px);line-height:1.02;
     letter-spacing:-0.015em;margin:20px 0 24px;
   }
-  .hero h1 em{color:var(--gold-bright);font-style:italic}
+  .hero h1 em{color:var(--gold-deep);font-style:italic}
   .hero p.lede{font-size:17.5px;color:var(--silver);max-width:490px;margin-bottom:36px}
   .cta-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
   .btn-primary{
     font-family:var(--mono);font-size:13px;letter-spacing:0.06em;text-transform:uppercase;
-    text-decoration:none;background:var(--gold);color:var(--navy-950);
+    text-decoration:none;background:var(--gold);color:var(--on-gold);
     padding:16px 30px;display:inline-block;border:1px solid var(--gold);border-radius:2px;
     transition:background .2s, transform .2s, box-shadow .2s;
   }
-  .btn-primary:hover{background:var(--gold-bright);transform:translateY(-2px);box-shadow:0 12px 30px rgba(201,169,97,0.25)}
+  .btn-primary:hover{background:var(--gold-bright);transform:translateY(-2px);box-shadow:0 12px 28px rgba(138,106,31,0.22)}
   .btn-ghost{
     font-family:var(--mono);font-size:13px;letter-spacing:0.06em;text-transform:uppercase;
     text-decoration:none;color:var(--ink);padding:16px 24px;display:inline-block;
@@ -116,10 +119,10 @@
   /* panneau alerte (glass) */
   .hero-panel{
     border:1px solid var(--hairline);border-radius:6px;
-    background:linear-gradient(180deg, rgba(16,26,46,0.92), rgba(10,17,32,0.92));
+    background:linear-gradient(180deg, #ffffff, #f7f4ee);
     backdrop-filter:blur(8px);
     padding:26px;position:relative;align-self:center;
-    box-shadow:0 30px 70px -30px rgba(0,0,0,0.8);
+    box-shadow:0 24px 60px -28px rgba(20,26,43,0.16);
   }
   .status-line{
     display:flex;justify-content:space-between;align-items:center;
@@ -133,7 +136,7 @@
   .metric:last-child{border-bottom:none}
   .metric .k{color:var(--ink-dim)}
   .metric .v{font-family:var(--mono);color:var(--ink)}
-  .metric .v.gold{color:var(--gold-bright)}
+  .metric .v.gold{color:var(--gold-deep)}
 
   /* ---------- SECTIONS ---------- */
   section{padding:96px 0;border-bottom:1px solid var(--hairline)}
@@ -144,11 +147,54 @@
   .center-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(28px,3.4vw,40px);line-height:1.12;margin-top:14px;letter-spacing:-0.01em}
   .center-head p{color:var(--silver);font-size:15px;margin-top:14px}
 
+  /* ---------- FONDATEURS / HISTOIRE ---------- */
+  .story{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+  .story p{color:var(--silver);font-size:15.5px;margin-bottom:16px}
+  .story p:last-child{margin-bottom:0}
+  .story strong{color:var(--ink);font-weight:600}
+  .pullquote{
+    font-family:var(--serif);font-size:clamp(21px,2.5vw,27px);line-height:1.28;
+    color:var(--ink);border-left:2px solid var(--gold);padding-left:22px;margin:6px 0 26px;
+  }
+  .founders{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:56px}
+  .founder{
+    border:1px solid var(--hairline);border-radius:8px;background:var(--navy-900);
+    padding:28px 26px;transition:transform .25s, box-shadow .25s;
+  }
+  .founder:hover{transform:translateY(-3px);box-shadow:0 20px 44px -26px rgba(20,26,43,0.14)}
+  .fhead{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+  /* Cercle du portrait. Les initiales servent de repli : si le fichier photo
+     n'existe pas encore, l'image se retire d'elle-même et les initiales
+     réapparaissent. Les deux portraits sont passés en noir et blanc pour être
+     homogènes (l'un des deux l'est nativement) — retirer le filtre pour la
+     couleur. */
+  .favatar{
+    width:72px;height:72px;border-radius:50%;flex:none;position:relative;overflow:hidden;
+    background:var(--navy-850);border:1.5px solid var(--gold);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--serif);font-size:25px;color:var(--gold-deep);
+  }
+  .favatar img{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;object-position:center 22%;
+    filter:grayscale(1) contrast(1.04);
+  }
+  .founder h3{font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.15}
+  .frole{font-family:var(--mono);font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold-deep);margin-top:5px}
+  .founder p{color:var(--ink-dim);font-size:14.5px}
+  .fdoes{list-style:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--hairline-soft)}
+  .fdoes li{font-size:13.5px;color:var(--silver);padding:5px 0 5px 16px;position:relative}
+  .fdoes li::before{content:"";position:absolute;left:0;top:12px;width:5px;height:5px;border-radius:50%;background:var(--gold)}
+  @media(max-width:860px){
+    .story{grid-template-columns:1fr;gap:28px}
+    .founders{grid-template-columns:1fr}
+  }
+
   /* problem */
   .problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--hairline);border:1px solid var(--hairline);border-radius:6px;overflow:hidden}
-  .problem-card{background:var(--navy-950);padding:32px 26px;transition:background .25s}
-  .problem-card:hover{background:var(--navy-900)}
-  .problem-card .n{font-family:var(--mono);color:var(--gold);font-size:12px;letter-spacing:0.1em}
+  .problem-card{background:var(--navy-900);padding:32px 26px;transition:background .25s}
+  .problem-card:hover{background:var(--navy-850)}
+  .problem-card .n{font-family:var(--mono);color:var(--gold-deep);font-size:12px;letter-spacing:0.1em}
   .problem-card h3{font-family:var(--serif);font-weight:400;font-size:21px;margin:14px 0 10px;line-height:1.2}
   .problem-card p{font-size:14px;color:var(--ink-dim)}
 
@@ -158,7 +204,7 @@
   .step .num{font-family:var(--serif);font-size:52px;color:transparent;-webkit-text-stroke:1px var(--gold)}
   .step h3{font-size:18.5px;font-weight:600;margin-bottom:8px}
   .step p{color:var(--ink-dim);font-size:14.5px;max-width:640px}
-  .step .tag{font-family:var(--mono);font-size:10.5px;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;margin-left:10px}
+  .step .tag{font-family:var(--mono);font-size:10.5px;color:var(--gold-deep);letter-spacing:0.08em;text-transform:uppercase;margin-left:10px}
 
   /* ---------- PRICING ---------- */
   .toggle{display:flex;justify-content:center;margin-bottom:40px}
@@ -168,15 +214,15 @@
     border:none;background:transparent;color:var(--silver);cursor:pointer;
     padding:9px 20px;border-radius:40px;transition:background .2s, color .2s;
   }
-  .toggle button.on{background:var(--gold);color:var(--navy-950);font-weight:600}
-  .toggle .save{color:var(--gold-bright)}
+  .toggle button.on{background:var(--gold);color:var(--on-gold);font-weight:600}
+  .toggle .save{color:var(--gold-deep)}
   .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
   .plan{
     border:1px solid var(--hairline);border-radius:8px;background:var(--navy-900);
     padding:30px 26px;display:flex;flex-direction:column;position:relative;
     transition:transform .25s, box-shadow .25s, border-color .25s;
   }
-  .plan:hover{transform:translateY(-4px);box-shadow:0 22px 50px -28px rgba(0,0,0,0.85)}
+  .plan:hover{transform:translateY(-4px);box-shadow:0 20px 44px -26px rgba(20,26,43,0.14)}
   .plan.feature{
     border-color:rgba(228,199,122,0.55);
     background:linear-gradient(180deg, var(--navy-850), var(--navy-900));
@@ -185,7 +231,7 @@
   .plan .badge{
     position:absolute;top:-11px;left:26px;
     font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:0.12em;
-    background:var(--gold);color:var(--navy-950);padding:5px 12px;border-radius:2px;
+    background:var(--gold);color:var(--on-gold);padding:5px 12px;border-radius:2px;
   }
   .plan .pname{font-family:var(--serif);font-size:24px;font-weight:400}
   .plan.feature .pname{color:var(--gold-bright)}
@@ -203,7 +249,7 @@
     border:1px solid var(--hairline);color:var(--ink);transition:all .2s;
   }
   .plan .pcta:hover{border-color:var(--gold);background:rgba(201,169,97,0.07)}
-  .plan.feature .pcta{background:var(--gold);color:var(--navy-950);border-color:var(--gold)}
+  .plan.feature .pcta{background:var(--gold);color:var(--on-gold);border-color:var(--gold)}
   .plan.feature .pcta:hover{background:var(--gold-bright)}
   .pricing-note{text-align:center;font-family:var(--mono);font-size:11px;color:var(--ink-dim);margin-top:34px;letter-spacing:0.02em}
   .pricing-note b{color:var(--gold)}
@@ -223,7 +269,7 @@
   form .row{display:flex;border-bottom:1px solid var(--hairline)}
   form input[type=email]{flex:1;background:transparent;border:none;outline:none;color:var(--ink);font-family:var(--sans);font-size:15px;padding:16px 4px}
   form input::placeholder{color:var(--ink-dim)}
-  form button{font-family:var(--mono);font-size:12px;letter-spacing:0.08em;text-transform:uppercase;background:var(--gold);color:var(--navy-950);border:none;padding:0 24px;cursor:pointer;border-radius:2px;transition:background .2s}
+  form button{font-family:var(--mono);font-size:12px;letter-spacing:0.08em;text-transform:uppercase;background:var(--gold);color:var(--on-gold);border:none;padding:0 24px;cursor:pointer;border-radius:2px;transition:background .2s}
   form button:hover{background:var(--gold-bright)}
   form .fine{font-size:11.5px;color:var(--ink-dim);margin-top:14px;font-family:var(--mono);letter-spacing:0.02em}
 
@@ -254,6 +300,7 @@
       <div class="navlinks">
         <a href="#probleme">Le problème</a>
         <a href="#fonctionnement">Fonctionnement</a>
+        <a href="#histoire">Qui sommes-nous</a>
         <a href="#tarifs">Tarifs</a>
         <a href="#confiance">Confidentialité</a>
       </div>
@@ -337,6 +384,60 @@
         </div>
       </li>
     </ul>
+  </div>
+</section>
+
+<section id="histoire">
+  <div class="wrap">
+    <div class="center-head reveal">
+      <span class="label">Les fondateurs</span>
+      <h2>Deux amis de trente ans, et une idée qu'on avait déjà mise de côté une fois.</h2>
+    </div>
+
+    <div class="story reveal">
+      <div>
+        <p>On travaille tous les deux chez <strong>Jobalto</strong>, comme Business Managers. On se connaît depuis longtemps, et l'idée de Seeker n'est pas née cette année. Elle nous est venue il y a <strong>trois ou quatre ans</strong>, à partir d'un constat tout simple : quand quelqu'un qu'on aime est quelque part et qu'on n'a pas de nouvelles, on n'a aucun moyen de savoir. Le bouton d'urgence du téléphone appelle les secours — il ne prévient pas les proches.</p>
+        <p>À l'époque, on a fait ce que tout le monde fait : on a demandé des devis pour faire développer l'application. La réponse a été <strong>plus de 80 000 euros</strong>. Pour deux salariés qui n'avaient ni fonds ni investisseur, la conversation s'arrêtait là. On a rangé l'idée dans un coin.</p>
+      </div>
+      <div>
+        <p class="pullquote">« On nous a dit 80 000 euros. On a fini par le construire nous-mêmes. »</p>
+        <p>Ce qui a changé, ce n'est pas notre budget — c'est ce qu'on sait faire. À force de <strong>formations</strong>, de soirées et de week-ends, on a appris à construire ce qu'on voulait au lieu de le commander. Et il y a une chose qu'on doit dire honnêtement : <strong>nos patrons y sont pour beaucoup</strong>. Ils nous poussent chaque jour à apprendre, à essayer, à créer des choses par nous-mêmes. Sans cette habitude-là, Seeker serait encore une idée rangée dans un coin.</p>
+        <p>Aujourd'hui l'application existe. Elle tourne sur nos deux téléphones, en français et en néerlandais, avec des données hébergées en Europe. Et elle n'a coûté que du temps.</p>
+      </div>
+    </div>
+
+    <div class="founders reveal">
+      <div class="founder">
+        <div class="fhead">
+          <div class="favatar">SH<img src="assets/simon.jpg" alt="Simon Hardy, cofondateur" onerror="this.remove()" /></div>
+          <div>
+            <h3>Simon Hardy</h3>
+            <div class="frole">Cofondateur · Produit &amp; développement</div>
+          </div>
+        </div>
+        <p>C'est lui qui écrit l'application. Il s'est formé au développement pour ne plus dépendre d'un devis, et construit Seeker sur iPhone et Android en parallèle de son métier.</p>
+        <ul class="fdoes">
+          <li>L'application, les serveurs, la sécurité des données</li>
+          <li>L'architecture technique et les mises à jour</li>
+          <li>La conformité RGPD et l'hébergement européen</li>
+        </ul>
+      </div>
+      <div class="founder">
+        <div class="fhead">
+          <div class="favatar">JD<img src="assets/johnny.jpg" alt="Johnny Dassonville, cofondateur" onerror="this.remove()" /></div>
+          <div>
+            <h3>Johnny Dassonville</h3>
+            <div class="frole">Cofondateur · Commercial &amp; marketing</div>
+          </div>
+        </div>
+        <p>C'est lui qui porte Seeker vers l'extérieur. Il ouvre les portes, écoute le terrain, et teste tout ce que Simon construit avant que ça n'arrive chez vous — en parallèle de son métier, lui aussi.</p>
+        <ul class="fdoes">
+          <li>Les partenariats : mutuelles, communes, employeurs</li>
+          <li>La communication et la relation avec les utilisateurs</li>
+          <li>Les tests réels, en conditions réelles</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -467,7 +568,7 @@
       </span>
     </div>
     <div class="disclaimer">
-      Imaginé et développé par <b style="color:var(--gold)">Johnny Dassonville</b> &amp; <b style="color:var(--gold)">Simon Hardy</b>, co-CEO.
+      Imaginé et développé par <b style="color:var(--gold-deep)">Johnny Dassonville</b> &amp; <b style="color:var(--gold-deep)">Simon Hardy</b>, co-CEO.
     </div>
     <div class="disclaimer" style="border-top:none;margin-top:6px;padding-top:0">Seeker ne remplace pas les services d'urgence. En cas de danger immédiat, appelez le 112.</div>
   </div>
