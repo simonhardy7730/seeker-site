@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# La page de suivi ne doit jamais être indexée : chaque URL contient le jeton
+# secret d'une alerte réelle. Elle n'a aucun intérêt pour un moteur, et son
+# indexation serait une fuite.
+Disallow: /track/
+
+Sitemap: https://myseekerapp.be/sitemap.xml
