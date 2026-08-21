@@ -245,7 +245,7 @@
   }
   .toggle button.on{background:var(--gold);color:var(--on-gold);font-weight:600}
   .toggle .save{color:var(--gold-deep)}
-  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
+  .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:20px;align-items:stretch}
   .plan{
     border:1px solid var(--hairline);border-radius:8px;background:var(--navy-900);
     padding:30px 26px;display:flex;flex-direction:column;position:relative;
@@ -524,7 +524,7 @@
         <div class="permonth">Pour toujours</div>
         <ul>
           <li class="head">L'essentiel :</li>
-          <li>✓ Déclenchement discret (bouton, dos, Siri)</li>
+          <li>✓ Déclenchement discret (bouton, dos de l'iPhone)</li>
           <li>✓ 1 contact de confiance</li>
           <li>✓ Suivi de position 60 min</li>
           <li>✓ Écran leurre + faux appel</li>
@@ -565,6 +565,22 @@
           <li>✓ Gestion simple des membres</li>
         </ul>
         <a class="pcta" href="#liste">Choisir Famille &amp; Amis</a>
+      </div>
+
+      <!-- Famille & Amis 10 -->
+      <div class="plan">
+        <div class="pname">Famille &amp; Amis 10</div>
+        <div class="ptag">Pour les grands cercles.</div>
+        <div class="price"><span class="amount" data-m="12,99 €" data-a="119,99 €">119,99 €</span><span class="per" data-m="/mois" data-a="/an">/an</span></div>
+        <div class="permonth" data-permonth="soit 10,00 €/mois — 1 € par personne">soit 10,00 €/mois — 1 € par personne</div>
+        <ul>
+          <li class="head">Tout Famille &amp; Amis, pour 10 comptes :</li>
+          <li>✓ 1 € par personne et par mois</li>
+          <li>✓ Grande famille, colocation, groupe d'amis</li>
+          <li>✓ Un seul paiement</li>
+          <li>✓ Protection mutuelle du cercle</li>
+        </ul>
+        <a class="pcta" href="#liste">Choisir Famille &amp; Amis 10</a>
       </div>
     </div>
 
