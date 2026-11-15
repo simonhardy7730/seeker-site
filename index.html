@@ -483,7 +483,11 @@
     transition:color .2s, border-color .2s, background .2s;
   }
   .intro-skip:hover{color:var(--ink);border-color:rgba(228,199,122,0.6);background:rgba(201,169,97,0.1)}
-  .intro-stage{position:relative;transform-style:preserve-3d}
+  /* PAS de preserve-3d ici : avec lui, le plan de ce conteneur passait devant
+     le téléphone incliné et interceptait les clics destinés au bouton. Le
+     conteneur ne reçoit donc aucun clic ; seul le téléphone en reçoit. */
+  .intro-stage{position:relative;margin:auto;pointer-events:none}
+  .intro-phone{pointer-events:auto;cursor:pointer}
   .intro-rings i{position:absolute;left:50%;top:50%;width:340px;height:340px;border-radius:50%;pointer-events:none;
     border:1.5px solid rgba(228,199,122,0.9);box-shadow:0 0 40px rgba(228,199,122,0.5), inset 0 0 40px rgba(228,199,122,0.25);
     opacity:0;transform:translate(-50%,-50%) scale(.3)}
@@ -705,12 +709,12 @@
   <button class="intro-skip" id="intro-skip" type="button" onclick="__introEnd()">Passer l'introduction</button>
   <div class="intro-stage" id="intro-stage">
     <div class="intro-rings" aria-hidden="true"><i></i><i></i><i></i></div>
-    <div class="intro-phone" id="intro-phone">
+    <div class="intro-phone" id="intro-phone" onclick="(window.__introGo||window.__introEnd)()">
       <div class="ip-screen">
         <img class="ip-logo" src="assets/logo-512.png" alt="" />
         <p class="ip-t1">Bienvenue sur Seeker</p>
         <p class="ip-t2">Votre sécurité, notre priorité.</p>
-        <button class="ip-btn" id="intro-enter" type="button" onclick="(window.__introGo||window.__introEnd)()">ENTRER DANS SEEKER</button>
+        <button class="ip-btn" id="intro-enter" type="button">ENTRER DANS SEEKER</button>
       </div>
     </div>
   </div>
