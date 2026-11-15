@@ -168,17 +168,15 @@
   .orb-fallback::before{transform:rotateX(68deg)}
   .orb-fallback::after{inset:-26%;border-color:rgba(228,199,122,0.2);transform:rotateX(74deg) rotateY(26deg)}
   .webgl .orb-fallback{opacity:0}
-  .hero-panel{position:absolute;left:-6%;bottom:2%;width:min(330px,86%);border:1px solid var(--line);border-radius:6px;padding:20px 22px;
-    background:rgba(10,17,32,0.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-  .status-line{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;color:var(--silver);
-    letter-spacing:0.06em;padding-bottom:13px;border-bottom:1px solid var(--line);margin-bottom:4px}
-  .pulse{width:7px;height:7px;border-radius:50%;background:var(--gold-bright);display:inline-block;margin-right:9px;vertical-align:middle;animation:pulse 2.2s infinite}
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(228,199,122,0.55)}70%{box-shadow:0 0 0 9px rgba(228,199,122,0)}100%{box-shadow:0 0 0 0 rgba(228,199,122,0)}}
-  .metric{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid var(--line-soft);font-size:13px}
-  .metric:last-child{border-bottom:none;padding-bottom:0}
-  .metric .k{color:var(--dim)}
-  .metric .v{font-family:var(--mono);font-size:12px;color:var(--ink);text-align:right}
-  .metric .v.gold{color:var(--gold-bright)}
+  /* Le téléphone du hero montre l'écran réel de l'application. La barre
+     d'état de la capture est rognée : seul l'écran de Seeker compte. */
+  .hero-phone{position:absolute;left:50%;top:50%;width:44%;transform:translate(-50%,-50%);border-radius:34px;padding:7px;
+    background:#0a1120;border:1px solid rgba(238,241,246,0.2);box-shadow:0 40px 90px -30px rgba(0,0,0,0.9)}
+  .hero-phone img{display:block;width:100%;height:auto;aspect-ratio:540/1096;object-fit:cover;object-position:bottom;border-radius:27px}
+  .hero-facts{display:grid;grid-template-columns:1fr 1fr;gap:0 36px;margin-top:52px;max-width:500px;border-top:1px solid var(--line)}
+  .hero-facts div{padding:13px 0;border-bottom:1px solid var(--line-soft)}
+  .hero-facts dt{font-family:var(--mono);font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim)}
+  .hero-facts dd{font-size:14.5px;color:var(--ink);margin-top:3px}
 
   /* ---------- SECTIONS ---------- */
   section{padding:132px 0;position:relative;border-top:1px solid var(--line)}
@@ -287,13 +285,13 @@
   .paper .label{color:var(--gold-deep)}
   .paper .label b{color:var(--paper-dim)}
   .paper h2 em{color:var(--gold-deep)}
-  .founders-top{display:grid;grid-template-columns:7fr 5fr;gap:80px;align-items:end;margin-bottom:84px}
+  .founders-top{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end;margin-bottom:84px}
   .founders-top h2{margin-top:22px}
-  .portraits{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .portraits figure{margin:0}
-  .portraits figure:nth-child(2){margin-top:56px}
-  .portraits img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:center 20%;filter:grayscale(1) contrast(1.05);border-radius:2px}
-  .portraits figcaption{font-family:var(--mono);font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--paper-dim);margin-top:12px}
+  /* Une seule grande photo, en couleur : son mur bleu nuit et sa lumière
+     dorée sont déjà ceux de la marque. */
+  .duo{margin:0}
+  .duo img{display:block;width:100%;height:auto;border-radius:2px}
+  .duo figcaption{font-family:var(--mono);font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--paper-dim);margin-top:12px}
   .story{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start}
   .story p{color:#3a4254;font-size:16.5px;line-height:1.75;margin-bottom:20px}
   .story p:last-child{margin-bottom:0}
@@ -336,12 +334,16 @@
   .pricing-note{font-family:var(--mono);font-size:11.5px;color:var(--dim);margin-top:30px;letter-spacing:0.02em}
   .pricing-note b{color:var(--gold);font-weight:400}
 
-  /* 07 — CONFIANCE : quatre engagements, sur une grille de filets */
-  .trust-row{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
-  .trust-item{padding:34px 40px 36px 0;border-bottom:1px solid var(--line)}
-  .trust-item:nth-child(even){padding-left:40px;border-left:1px solid var(--line)}
-  .trust-item .label{margin-bottom:12px;color:var(--ink);letter-spacing:0.14em}
-  .trust-item p{font-size:15.5px;color:var(--silver);max-width:440px}
+  /* 07 — CONFIANCE : trois engagements à lire en dix secondes, puis la
+     limite du produit, dite à part et sans détour. */
+  .pledges{list-style:none;border-top:1px solid var(--line)}
+  .pledges li{display:grid;grid-template-columns:64px 1fr;gap:20px;padding:30px 0 32px;border-bottom:1px solid var(--line)}
+  .pledges .pn{font-family:var(--serif);font-weight:300;font-size:44px;line-height:1;color:var(--gold)}
+  .pledges h3{font-size:25px;letter-spacing:-0.015em;line-height:1.15;margin-bottom:8px}
+  .pledges p{font-size:16px;color:var(--silver);max-width:520px}
+  .limit{margin-top:34px;padding:22px 26px 24px;border-left:2px solid var(--gold)}
+  .limit .label{color:var(--ink);letter-spacing:0.14em;margin-bottom:10px}
+  .limit p{font-size:15.5px;color:var(--silver);max-width:520px}
   .trust-more{margin-top:34px;font-size:15px}
   .trust-more a{color:var(--gold-bright);text-underline-offset:4px;display:inline-block;padding:12px 0}
 
@@ -482,12 +484,10 @@
     #liste{padding:96px 0}
     .hero{grid-template-columns:1fr;min-height:0;padding-top:44px;padding-bottom:72px;gap:26px}
     .cta-row{gap:18px}
-    /* Sur mobile, l'objet 3D occupe sa propre zone et le panneau se pose sur
-       son bord inférieur — il ne doit jamais recouvrir les boutons. */
-    .hero-visual{--s:min(420px, calc(100vw - 44px));aspect-ratio:auto;max-width:420px;width:100%;padding-top:calc(var(--s) * 0.82);margin-top:0}
-    #orb{inset:auto;left:calc(var(--s) * -0.12);top:calc(var(--s) * -0.12);width:calc(var(--s) * 1.24);height:calc(var(--s) * 1.24)}
-    .orb-fallback{inset:auto;left:calc(var(--s) * 0.16);top:calc(var(--s) * 0.07);width:calc(var(--s) * 0.68);height:calc(var(--s) * 0.68)}
-    .hero-panel{position:relative;left:auto;bottom:auto;width:100%;margin-top:calc(var(--s) * -0.1)}
+    .hero-visual{max-width:420px;margin-top:14px}
+    .hero-phone{width:48%;border-radius:28px;padding:5px}
+    .hero-phone img{border-radius:23px}
+    .hero-facts{margin-top:36px;gap:0 22px}
     .split{grid-template-columns:1fr;gap:34px}
     .split-head{position:static}
     .fact{grid-template-columns:56px 1fr;gap:18px;padding:28px 0}
@@ -515,11 +515,12 @@
     .demo-stage .phone{width:min(230px,60vw);border-radius:32px;padding:6px}
     .demo-screens{border-radius:26px}
     .founders-top{grid-template-columns:1fr;gap:38px;margin-bottom:52px}
-    .portraits figure:nth-child(2){margin-top:34px}
     .story{grid-template-columns:1fr;gap:20px}
     .founders{grid-template-columns:1fr;gap:44px;margin-top:56px}
-    .trust-row{grid-template-columns:1fr}
-    .trust-item,.trust-item:nth-child(even){padding:26px 0 28px;border-left:none}
+    .pledges li{grid-template-columns:44px 1fr;gap:14px;padding:24px 0 26px}
+    .pledges .pn{font-size:36px}
+    .pledges h3{font-size:21px}
+    .limit{padding:18px 0 18px 20px}
     .faq-list summary{font-size:19px;padding:22px 0}
     .faq-list .a{padding-right:0}
     .waitlist{grid-template-columns:1fr;gap:34px}
@@ -534,6 +535,12 @@
     .plans{grid-template-columns:1fr}
     .plan{border-right:none;border-bottom:1px solid var(--line)}
     .plan:last-child{border-bottom:none}
+    /* Formules empilées : on resserre pour que les quatre se parcourent vite. */
+    .plan{padding:26px 22px 24px}
+    .plan .ptag,.plan .permonth{min-height:0}
+    .plan .price{font-size:40px;margin-top:14px}
+    .plan ul{margin:14px 0 20px;padding-top:12px}
+    .plan li{padding:4px 0}
     .cta-row .btn-primary{width:100%}
     form .row{flex-direction:column;border-bottom:none;padding-bottom:0}
     form input[type=email]{border-bottom:1px solid var(--line);margin-bottom:6px}
@@ -609,17 +616,19 @@
       <a class="btn-primary" href="#liste">Être averti au lancement</a>
       <a class="btn-ghost" href="#fonctionnement">Comment ça marche →</a>
     </div>
+    <dl class="hero-facts">
+      <div><dt>Déclenchement</dt><dd>Discret — 3× bouton</dd></div>
+      <div><dt>Contacts de confiance</dt><dd>1 à 5</dd></div>
+      <div><dt>Position partagée</dt><dd>En direct</dd></div>
+      <div><dt>Mode trajet</dt><dd>Veille automatique</dd></div>
+    </dl>
   </div>
   <div class="hero-visual reveal">
     <div class="orb-fallback" aria-hidden="true"></div>
     <canvas id="orb" aria-hidden="true"></canvas>
-    <div class="hero-panel">
-      <div class="status-line"><span><span class="pulse"></span>ALERTE ACTIVE</span><span>00:47:12</span></div>
-      <div class="metric"><span class="k">Déclenchement</span><span class="v gold">Discret — 3× bouton</span></div>
-      <div class="metric"><span class="k">Contacts de confiance</span><span class="v">1 à 5</span></div>
-      <div class="metric"><span class="k">Position partagée</span><span class="v">En direct · 8 s</span></div>
-      <div class="metric"><span class="k">Mode trajet</span><span class="v gold">Veille automatique</span></div>
-      <div class="metric"><span class="k">Durée restante</span><span class="v">47 min</span></div>
+    <!-- Une vraie capture de l'application, pas une maquette. -->
+    <div class="hero-phone">
+      <img src="assets/app-alerte.jpg" alt="L'écran principal de Seeker : le bouton d'alerte, le faux appel et le mode trajet" width="540" height="1170" />
     </div>
   </div>
 </div>
@@ -781,16 +790,11 @@
         <span class="label"><b>05</b>Les fondateurs</span>
         <h2>Deux amis de trente ans, et une idée qu'on avait déjà mise de côté une fois.</h2>
       </div>
-      <div class="portraits reveal">
-        <figure>
-          <img src="assets/simon.jpg" alt="Simon Hardy, cofondateur" loading="lazy" width="800" height="800" />
-          <figcaption>Simon Hardy</figcaption>
-        </figure>
-        <figure>
-          <img src="assets/johnny.jpg" alt="Johnny Dassonville, cofondateur" loading="lazy" width="800" height="800" />
-          <figcaption>Johnny Dassonville</figcaption>
-        </figure>
-      </div>
+      <figure class="duo reveal">
+        <img src="assets/fondateurs.jpg" srcset="assets/fondateurs-720.jpg 720w, assets/fondateurs.jpg 1125w" sizes="(max-width:900px) 100vw, 560px"
+             alt="Simon Hardy et Johnny Dassonville, cofondateurs de Seeker" loading="lazy" width="1125" height="1398" />
+        <figcaption>Simon Hardy &amp; Johnny Dassonville — cofondateurs</figcaption>
+      </figure>
     </div>
 
     <div class="story reveal">
@@ -924,23 +928,26 @@
       <h2>Ce que Seeker fait — et ce qu'il ne prétend pas faire.</h2>
     </div>
     <div class="reveal">
-      <div class="trust-row">
-        <div class="trust-item">
-          <span class="label">Ne remplace pas le 112</span>
-          <p>Seeker alerte vos proches, pas les secours. En danger immédiat, composez toujours le 112.</p>
-        </div>
-        <div class="trust-item">
-          <span class="label">Données chiffrées</span>
-          <p>Votre position est chiffrée en transit et au repos, hébergée dans l'Union européenne.</p>
-        </div>
-        <div class="trust-item">
-          <span class="label">Effacement automatique</span>
-          <p>La localisation est supprimée après la fenêtre d'alerte.</p>
-        </div>
-        <div class="trust-item">
-          <span class="label">Déclenchement volontaire</span>
-          <p>Aucun suivi en dehors d'une alerte que vous déclenchez vous-même.</p>
-        </div>
+      <ol class="pledges">
+        <li>
+          <span class="pn">1</span>
+          <div><h3>Déclenchement volontaire</h3>
+          <p>Aucun suivi en dehors d'une alerte que vous déclenchez vous-même.</p></div>
+        </li>
+        <li>
+          <span class="pn">2</span>
+          <div><h3>Données chiffrées</h3>
+          <p>Votre position est chiffrée en transit et au repos, hébergée dans l'Union européenne.</p></div>
+        </li>
+        <li>
+          <span class="pn">3</span>
+          <div><h3>Effacement automatique</h3>
+          <p>La localisation est supprimée après la fenêtre d'alerte.</p></div>
+        </li>
+      </ol>
+      <div class="limit">
+        <span class="label">Ne remplace pas le 112</span>
+        <p>Seeker alerte vos proches, pas les secours. En danger immédiat, composez toujours le 112.</p>
       </div>
       <p class="trust-more"><a href="confidentialite.html">Lire la politique de confidentialité complète</a></p>
     </div>
