@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Seeker — Alertez vos proches avant qu'il ne soit trop tard</title>
-<meta name="description" content="Seeker déclenche une alerte discrète vers vos proches et partage votre position pendant 1 h, sans sortir votre téléphone. Bientôt en Belgique et en France." />
+<title>Seeker — La tranquillité d'esprit, même à distance.</title>
+<meta name="description" content="Seeker déclenche une alerte discrète vers vos proches et partage votre position pendant 1 h, sans sortir votre téléphone. Bientôt sur Android et iOS, en Belgique et en France." />
 <meta name="theme-color" content="#070c14" />
 <link rel="icon" type="image/png" href="assets/logo-512.png" />
 <link rel="apple-touch-icon" href="assets/logo-512.png" />
@@ -74,8 +74,8 @@
      · Cinq animations seulement, chacune avec une raison :
          1. l'introduction ............ accueillir
          2. l'objet du hero ........... la protection, puis le signal
-         3. le radar .................. vous au centre, vos proches autour
-         4. le fil des étapes ......... l'ordre dans lequel ça se passe
+         3. la carte .................. vous au centre, vos proches reliés à vous
+         4. l'alerte en cinq temps .... ce qui se passe, écran par écran
          5. l'écran de démonstration .. montrer la vraie interface
        Le reste apparaît simplement, une fois, sans effet.
      ===================================================================== */
@@ -198,29 +198,39 @@
   .why-body{display:grid;grid-template-columns:6fr 5fr;gap:90px;align-items:center}
   .why-body p{color:var(--silver);font-size:18px;line-height:1.7;margin-bottom:24px;max-width:540px}
   .why-body p strong{color:var(--ink);font-weight:500}
-  .radar{perspective:1100px;height:330px;display:flex;align-items:center;justify-content:center}
-  .radar-disc{position:relative;width:min(420px,84vw);aspect-ratio:1;border-radius:50%;
-    transform:rotateX(64deg) rotateZ(var(--rz,0deg));transform-style:preserve-3d;
-    background:
-      linear-gradient(90deg, transparent calc(50% - .5px), rgba(228,199,122,0.22) calc(50% - .5px) calc(50% + .5px), transparent calc(50% + .5px)),
-      linear-gradient(0deg, transparent calc(50% - .5px), rgba(228,199,122,0.22) calc(50% - .5px) calc(50% + .5px), transparent calc(50% + .5px)),
-      repeating-radial-gradient(circle, transparent 0 16.2%, rgba(228,199,122,0.30) 16.2% 16.7%),
-      radial-gradient(circle, rgba(201,169,97,0.16), rgba(201,169,97,0.02) 70%);
-    border:1px solid rgba(228,199,122,0.55);
-    box-shadow:0 0 90px rgba(201,169,97,0.28), inset 0 0 70px rgba(201,169,97,0.14)}
-  .radar .sweep{position:absolute;inset:0;border-radius:50%;
-    background:conic-gradient(from 0deg, transparent 0 262deg, rgba(228,199,122,0.07) 290deg, rgba(240,220,160,0.62) 360deg);
-    animation:sweep 4s linear infinite}
-  @keyframes sweep{to{transform:rotate(360deg)}}
-  .radar .me,.radar .blip{position:absolute;border-radius:50%;translate:-50% -50%}
-  .radar .me{left:50%;top:50%;width:16px;height:16px;background:#fff3cf;box-shadow:0 0 0 6px rgba(228,199,122,0.25), 0 0 30px 6px rgba(228,199,122,0.9)}
-  .radar .blip{width:12px;height:12px;background:#f0dca0;box-shadow:0 0 18px 4px rgba(228,199,122,0.85);opacity:.22;animation:blip 4s linear infinite}
-  /* une tige lumineuse dressée au-dessus de chaque point : c'est elle qui donne le relief */
-  .radar .me::after,.radar .blip::after{content:"";position:absolute;left:50%;bottom:50%;width:1.5px;height:54px;margin-left:-.75px;
-    background:linear-gradient(to top, rgba(240,220,160,0.95), transparent);transform-origin:50% 100%;transform:rotateX(-90deg)}
-  .radar .me::after{height:84px}
-  @keyframes blip{0%{opacity:1;scale:1.7}22%{opacity:.7;scale:1}100%{opacity:.22;scale:1}}
-  .radar-cap{text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:0.08em;color:var(--dim);margin-top:8px}
+  /* La carte du partage de position : vous au centre, vos proches reliés à
+     vous, l'alerte qui arrive, l'heure de suivi qui s'écoule. Une seule boucle
+     lente ; elle ne démarre que lorsque la carte est à l'écran. */
+  .share{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:4px;background:#0b1322}
+  .share .st{fill:none;stroke:rgba(238,241,246,0.07);stroke-linecap:round}
+  .share .blk{fill:rgba(238,241,246,0.028)}
+  .share .lk{fill:none;stroke:var(--gold-bright);stroke-width:1.2;stroke-dasharray:1;stroke-dashoffset:1}
+  .share .pp circle{fill:#101a2e;stroke:rgba(238,241,246,0.28);stroke-width:1}
+  .share .pp path{fill:none;stroke:rgba(238,241,246,0.55);stroke-width:1.3;stroke-linecap:round}
+  .share .me{fill:#fff3cf}
+  .share .halo{fill:none;stroke:var(--gold-bright);stroke-width:1;transform-box:fill-box;transform-origin:center;opacity:0}
+  .share .hour{fill:none;stroke:var(--gold);stroke-width:1.6;stroke-dasharray:1;stroke-dashoffset:0;transform:rotate(-90deg);transform-box:fill-box;transform-origin:center}
+  .share .hour-bg{fill:none;stroke:rgba(228,199,122,0.16);stroke-width:1.6}
+  .share text{font-family:var(--mono);font-size:11.5px;letter-spacing:0.1em;fill:var(--dim)}
+  .share .t-gold{fill:var(--gold-bright)}
+  .share .chip{opacity:0}
+  .share .chip rect{fill:#101a2e;stroke:rgba(228,199,122,0.55);stroke-width:1}
+  .share .chip .ct{font-family:var(--sans);font-size:12.5px;letter-spacing:0;fill:var(--ink)}
+  .in .share .lk{animation:lk 10s var(--ease) infinite}
+  .in .share .lk.b{animation-delay:.45s}
+  .in .share .lk.c{animation-delay:.9s}
+  .in .share .pp circle{animation:pp 10s linear infinite}
+  .in .share .pp.b circle{animation-delay:.45s}
+  .in .share .pp.c circle{animation-delay:.9s}
+  .in .share .chip{animation:chip 10s var(--ease) infinite}
+  .in .share .hour{animation:hour 10s linear infinite}
+  .in .share .halo{animation:halo 2.6s ease-out infinite}
+  @keyframes lk{0%,6%{stroke-dashoffset:1;opacity:1}20%,88%{stroke-dashoffset:0;opacity:1}96%,100%{stroke-dashoffset:0;opacity:0}}
+  @keyframes pp{0%,17%{stroke:rgba(238,241,246,0.28)}22%,88%{stroke:#e4c77a}97%,100%{stroke:rgba(238,241,246,0.28)}}
+  @keyframes chip{0%,26%{opacity:0;transform:translateY(6px)}32%,88%{opacity:1;transform:none}95%,100%{opacity:0;transform:none}}
+  @keyframes hour{0%,20%{stroke-dashoffset:0}92%,100%{stroke-dashoffset:1}}
+  @keyframes halo{0%{transform:scale(.5);opacity:.9}100%{transform:scale(2.6);opacity:0}}
+  .radar-cap{text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:0.08em;color:var(--dim);margin-top:16px}
 
   /* 03 — FONCTIONNEMENT */
   .section-head{max-width:860px;margin-bottom:76px}
@@ -230,9 +240,57 @@
   .phone{border-radius:38px;overflow:hidden;position:relative;border:1px solid rgba(238,241,246,0.18);background:#0a1120;padding:8px;
     box-shadow:0 50px 100px -40px rgba(0,0,0,0.9)}
   .phone video,.phone img{display:block;width:100%;height:auto;border-radius:30px;background:#0a1120}
-  /* La vidéo de démonstration est déjà un film monté : on la présente comme un écran, sans coque. */
-  .phone.screen{padding:0;border-radius:6px}
-  .phone.screen video{border-radius:0}
+  /* L'alerte en cinq temps : un écran par étape, dans le même téléphone. */
+  .flow{position:relative;aspect-ratio:540/1096;border-radius:30px;overflow:hidden;background:#070b13;container-type:inline-size}
+  .flow .fs{position:absolute;inset:0;opacity:0;transition:opacity .7s var(--ease)}
+  .flow .fs.on{opacity:1}
+  .flow .fs > img{width:100%;height:100%;object-fit:cover;object-position:bottom;border-radius:0}
+  /* 1 — l'appui sur le bouton d'alerte */
+  .flow .press{position:absolute;left:50%;top:25.6%;width:39%;aspect-ratio:1;border-radius:50%;translate:-50% -50%;border:1.5px solid var(--gold-bright);opacity:0}
+  .flow .fs.on .press{animation:press 1.8s ease-out .5s 2}
+  @keyframes press{0%{scale:.86;opacity:.95}100%{scale:1.5;opacity:0}}
+  /* 2 — l'écran d'alerte active (mêmes libellés que dans l'application) */
+  .fs-alert{display:flex;flex-direction:column;padding:15% 6.4% 7%;background:#070c14;font-size:11px;font-size:4.3cqw;color:var(--ink)}
+  .fs-alert .row{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono)}
+  .fs-alert .row b{font-weight:600;letter-spacing:.12em;color:var(--gold-bright);font-size:.82em;display:flex;align-items:center;gap:.7em}
+  .fs-alert .row b::before{content:"";width:.7em;height:.7em;border-radius:50%;background:var(--gold-bright);animation:blink 1.6s ease-in-out infinite}
+  @keyframes blink{50%{opacity:.25}}
+  .fs-alert .hr{height:1px;background:var(--line);margin-top:1.5em}
+  .fs-alert .m{display:flex;justify-content:space-between;padding:1.05em 0;border-bottom:1px solid var(--line-soft);font-size:.92em;color:var(--silver)}
+  .fs-alert .m span:last-child{font-family:var(--mono);color:var(--ink)}
+  .fs-alert .m .g{color:var(--gold-bright) !important}
+  .fs-alert .n{font-size:.8em;line-height:1.5;color:var(--dim);margin-top:1em}
+  .fs-alert .sp{flex:1}
+  .fs-alert .bt{font-family:var(--mono);font-size:.7em;font-weight:600;letter-spacing:.08em;text-align:center;padding:1.25em .5em;margin-top:.95em;border-radius:2px}
+  .fs-alert .bt.a{background:var(--gold-bright);color:var(--on-gold)}
+  .fs-alert .bt.b{border:1px solid var(--line);background:#101a2e}
+  .fs-alert .bt.c{background:var(--gold);color:var(--on-gold)}
+  /* 3 — ce que reçoit un proche : la notification, ou le SMS avec le lien */
+  .fs-notif{background:#05080f;padding:24% 5.5% 0;font-size:11px;font-size:4.3cqw}
+  .fs-notif .nt{background:#141d30;border:1px solid var(--line);border-radius:1.1em;padding:1em 1.1em;translate:0 -14px;opacity:0;transition:translate .7s var(--ease) .35s, opacity .7s var(--ease) .35s}
+  .fs-notif.on .nt{translate:0 0;opacity:1}
+  .fs-notif .nh{display:flex;align-items:center;gap:.6em;font-size:.74em;letter-spacing:.08em;color:var(--dim);margin-bottom:.6em}
+  .fs-notif .nh img{width:1.5em;height:1.5em;border-radius:.3em}
+  .fs-notif .nh span:last-child{margin-left:auto;letter-spacing:0}
+  .fs-notif .nt b{display:block;font-weight:600;font-size:.98em;margin-bottom:.2em}
+  .fs-notif .nt p{font-size:.86em;line-height:1.4;color:var(--silver)}
+  .fs-notif .or{font-family:var(--mono);font-size:.68em;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin:2.4em 0 1em;text-align:center}
+  .fs-notif .sms{background:#1b2640;border-radius:1.2em 1.2em 1.2em .3em;padding:.9em 1.1em;font-size:.86em;line-height:1.45;color:var(--ink);max-width:88%;
+    translate:0 12px;opacity:0;transition:translate .7s var(--ease) 1.1s, opacity .7s var(--ease) 1.1s}
+  .fs-notif.on .sms{translate:0 0;opacity:1}
+  .fs-notif .sms u{color:var(--gold-bright);text-underline-offset:2px}
+  /* 4 et 5 — la page de suivi : la position, puis le temps restant */
+  .fs-track .tw{position:absolute;left:0;right:0;top:0;aspect-ratio:540/905}
+  .fs-track .tw img{width:100%;height:100%;border-radius:0}
+  .fs-track .mk{position:absolute;border:1.5px solid var(--gold-bright);opacity:0;transition:opacity .5s}
+  .fs-track .mk.pos{left:50%;top:40.8%;width:17%;aspect-ratio:1;border-radius:50%;translate:-50% -50%}
+  .fs-track .mk.time{left:50.2%;top:89.4%;width:46.2%;height:9.6%;border-radius:2px}
+  .flow[data-at="3"] .mk.pos{opacity:1;animation:press 2s ease-out infinite}
+  .flow[data-at="4"] .mk.time{opacity:1}
+  .flow-cap{font-family:var(--mono);font-size:11px;letter-spacing:0.08em;color:var(--dim);text-align:center;margin-top:16px;min-height:2.6em}
+  .flow-cap b{color:var(--gold);font-weight:400;margin-right:8px}
+  .step{cursor:pointer}
+  .step:focus-visible{outline:1px solid var(--gold);outline-offset:6px}
   .demo-text{margin-bottom:44px}
   .demo-text h3{font-size:clamp(24px,2.6vw,32px);line-height:1.16;letter-spacing:-0.015em;margin-bottom:14px}
   .demo-text p{color:var(--silver);max-width:560px}
@@ -304,6 +362,15 @@
   .founder p{color:#3a4254;font-size:15.5px}
   .fdoes{list-style:none;margin-top:20px}
   .fdoes li{font-size:14.5px;color:var(--paper-dim);padding:10px 0;border-top:1px solid var(--paper-line)}
+
+  /* LA CONVICTION : une phrase, seule, qui se pose mot après mot. */
+  .creed{padding:170px 0 180px}
+  .creed-q{font-family:var(--serif);font-weight:300;font-size:clamp(34px,5.6vw,82px);line-height:1.08;letter-spacing:-0.025em;max-width:1120px;margin-top:34px}
+  .creed-q em{font-style:italic;color:var(--gold-bright)}
+  .has-js .creed-q.reveal{opacity:1;transform:none}
+  .has-js .creed-q .w{display:inline-block;opacity:0;transform:translateY(.32em);
+    transition:opacity 1s var(--ease) calc(var(--i) * 75ms), transform 1s var(--ease) calc(var(--i) * 75ms)}
+  .has-js .creed-q.in .w{opacity:1;transform:none}
 
   /* 06 — TARIFS : un tableau. C'est le seul endroit où l'on compare. */
   .center-head{max-width:820px;margin:0 0 56px}
@@ -496,8 +563,9 @@
     .why h2{margin:22px 0 40px}
     .why-body{grid-template-columns:1fr;gap:30px}
     .why-body p{font-size:17px}
-    .radar{height:240px}
     .section-head{margin-bottom:44px}
+    .creed{padding:104px 0 112px}
+    .flow{border-radius:24px}
     .how{grid-template-columns:1fr;gap:40px}
     .phone-stage{position:static;max-width:240px;margin:0 auto}
     /* Sur téléphone, les fonctions deviennent des pastilles au-dessus de
@@ -553,7 +621,9 @@
     html{scroll-behavior:auto}
     *,*::before,*::after{animation:none !important;transition-duration:.01ms !important}
     .has-js .reveal{opacity:1;transform:none}
-    .radar .blip{opacity:.8}
+    .has-js .creed-q .w{opacity:1;transform:none}
+    .share .lk{stroke-dashoffset:0}
+    .flow .fs-notif .nt,.flow .fs-notif .sms{opacity:1;translate:0 0}
   }
 </style>
 </head>
@@ -609,7 +679,7 @@
 
 <div class="wrap hero">
   <div class="reveal">
-    <span class="label">Belgique · France — bientôt disponible</span>
+    <span class="label">Bientôt sur Android et iOS — Belgique · France</span>
     <h1>Vos proches savent.<br>Et savent <em>où.</em></h1>
     <p class="lede">Seeker envoie une alerte silencieuse à vos contacts de confiance et partage votre position pendant une heure — sans sortir votre téléphone, sans que personne autour de vous ne le remarque.</p>
     <div class="cta-row">
@@ -617,7 +687,7 @@
       <a class="btn-ghost" href="#fonctionnement">Comment ça marche →</a>
     </div>
     <dl class="hero-facts">
-      <div><dt>Déclenchement</dt><dd>Discret — 3× bouton</dd></div>
+      <div><dt>Déclenchement</dt><dd>Un geste discret</dd></div>
       <div><dt>Contacts de confiance</dt><dd>1 à 5</dd></div>
       <div><dt>Position partagée</dt><dd>En direct</dd></div>
       <div><dt>Mode trajet</dt><dd>Veille automatique</dd></div>
@@ -637,7 +707,7 @@
   <div class="wrap split">
     <div class="split-head reveal">
       <span class="label"><b>01</b>Le constat</span>
-      <h2>Le seul bouton d'urgence que vous avez déjà appelle les secours — pas vos proches.</h2>
+      <h2>Le SOS de votre téléphone contacte les secours. Seeker permet aussi de prévenir vos proches.</h2>
     </div>
     <ol class="facts">
       <li class="fact reveal">
@@ -677,16 +747,38 @@
         <p><strong>Seeker n'est pas fait pour avoir peur.</strong> Il est fait pour ne plus avoir à y penser : le jour où quelque chose cloche, un geste suffit, et les bonnes personnes savent — et savent où vous êtes.</p>
       </div>
       <div class="reveal">
-        <div class="radar" aria-hidden="true">
-          <div class="radar-disc">
-            <i class="sweep"></i>
-            <b class="blip" style="left:72%;top:30%;animation-delay:.53s"></b>
-            <b class="blip" style="left:62%;top:78%;animation-delay:1.74s"></b>
-            <b class="blip" style="left:26%;top:62%;animation-delay:2.70s"></b>
-            <b class="me"></b>
-          </div>
-        </div>
-        <p class="radar-cap">Vous, au centre. Vos proches, autour.</p>
+        <svg class="share" viewBox="0 0 520 440" role="img" aria-label="Schéma : une personne déclenche une alerte, ses contacts de confiance sont prévenus et voient sa position pendant 60 minutes">
+          <!-- un quartier, dessiné : des rues, un rond-point, quelques îlots -->
+          <path class="blk" d="M40 40h120v84H40zM200 40h110v60H200zM372 250h108v86H372zM60 300h130v96H60z" />
+          <path class="st" stroke-width="13" d="M-10 172 C120 150 200 210 260 230 S420 220 540 150" />
+          <path class="st" stroke-width="9" d="M176 -10 C190 110 230 180 260 230 S330 360 320 460" />
+          <path class="st" stroke-width="5" d="M-10 330 C90 300 170 280 260 230" />
+          <path class="st" stroke-width="5" d="M350 -10 C340 90 300 170 260 230" />
+          <path class="st" stroke-width="4" d="M420 460 C410 380 440 300 540 280" />
+          <path class="st" stroke-width="4" d="M-10 70 C80 90 150 60 230 -10" />
+          <!-- les liaisons : de vous vers chaque proche -->
+          <path class="lk a" pathLength="1" d="M260 230 Q170 190 102 104" />
+          <path class="lk b" pathLength="1" d="M260 230 Q350 200 418 122" />
+          <path class="lk c" pathLength="1" d="M260 230 Q330 290 398 352" />
+          <!-- vous -->
+          <circle class="halo" cx="260" cy="230" r="14" />
+          <circle class="hour-bg" cx="260" cy="230" r="34" />
+          <circle class="hour" pathLength="1" cx="260" cy="230" r="34" />
+          <circle class="me" cx="260" cy="230" r="6.5" />
+          <text class="t-gold" x="260" y="286" text-anchor="middle">VOUS · 60 MIN</text>
+          <!-- vos contacts de confiance -->
+          <g class="pp a"><circle cx="92" cy="92" r="17" /><path d="M92 88a4 4 0 1 0 0-8a4 4 0 0 0 0 8zM83 101c1.500-5 5-7 9-7s7.500 2 9 7" /></g>
+          <g class="pp b"><circle cx="428" cy="110" r="17" /><path d="M428 106a4 4 0 1 0 0-8a4 4 0 0 0 0 8zM419 119c1.500-5 5-7 9-7s7.500 2 9 7" /></g>
+          <g class="pp c"><circle cx="408" cy="362" r="17" /><path d="M408 358a4 4 0 1 0 0-8a4 4 0 0 0 0 8zM399 371c1.500-5 5-7 9-7s7.500 2 9 7" /></g>
+          <!-- l'alerte reçue -->
+          <g class="chip">
+            <rect x="336" y="40" width="150" height="40" rx="4" />
+            <circle cx="352" cy="60" r="3.5" fill="#e4c77a" />
+            <text class="ct" x="364" y="57">Alerte reçue</text>
+            <text x="364" y="71" style="font-size:8.5px">POSITION EN DIRECT</text>
+          </g>
+        </svg>
+        <p class="radar-cap">Vous, au centre. Vos proches, autour.<br>Votre position, partagée pendant 60 minutes.</p>
       </div>
     </div>
   </div>
@@ -701,42 +793,88 @@
 
     <div class="how">
       <div class="phone-stage reveal">
-        <div class="phone screen">
-          <video src="assets/demo.mp4" muted loop autoplay playsinline preload="metadata" controls
-                 aria-label="Démonstration de l'application Seeker"></video>
+        <div class="phone">
+          <div class="flow" id="flow" data-at="0">
+            <div class="fs on" data-step="0">
+              <img src="assets/app-alerte.jpg" alt="Écran principal de Seeker : le bouton d'alerte" loading="lazy" width="540" height="1170" />
+              <i class="press" aria-hidden="true"></i>
+            </div>
+            <div class="fs fs-alert" data-step="1" role="img" aria-label="Écran d'alerte active : position partagée en direct, envoi du lien par SMS, prolongation, fin de l'alerte">
+              <div class="row"><b>ALERTE ACTIVE</b><span>00:59:48</span></div>
+              <div class="hr"></div>
+              <div class="m"><span>Mes protecteurs</span><span>1</span></div>
+              <div class="m"><span>Position partagée</span><span class="g">En direct</span></div>
+              <p class="n">Envoyez le SMS ci-dessous pour prévenir vos proches et leur transmettre votre lien de suivi.</p>
+              <div class="sp"></div>
+              <div class="bt a">ENVOYER MA POSITION PAR SMS</div>
+              <div class="bt b">PROLONGER DE 30 MIN</div>
+              <div class="bt c">JE SUIS EN SÉCURITÉ — TERMINER</div>
+            </div>
+            <div class="fs fs-notif" data-step="2" role="img" aria-label="Ce que reçoit un proche : une notification Seeker, ou un SMS contenant le lien de suivi">
+              <div class="nt">
+                <div class="nh"><img src="assets/logo-512.png" alt="" /><span>SEEKER</span><span>maintenant</span></div>
+                <b>🔴 Simon est en danger</b>
+                <p>Ouvrez Seeker pour suivre sa position en direct.</p>
+              </div>
+              <div class="or">ou, sans l'application</div>
+              <div class="sms">🔴 Alerte Seeker : j'ai besoin que tu saches où je suis. Suis ma position en direct : <u>myseekerapp.be/track</u></div>
+            </div>
+            <div class="fs fs-track" data-step="3 4">
+              <div class="tw">
+                <img src="assets/app-suivi.jpg" alt="Page de suivi Seeker : la position sur une carte, en direct, et le temps restant" loading="lazy" width="540" height="905" />
+                <i class="mk pos" aria-hidden="true"></i>
+                <i class="mk time" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
         </div>
+        <p class="flow-cap" id="flow-cap" aria-hidden="true"></p>
       </div>
 
       <div>
         <div class="demo-text reveal">
-          <h3>L'application, en treize secondes.</h3>
-          <p>Plutôt que de vous l'expliquer, on vous la montre. Ce sont de vraies captures : l'alerte en cours, la position de la personne qui s'affiche en direct sur une carte, et le lien que reçoivent ses proches. Rien n'est simulé.</p>
-          <div class="demo-note">Le son est coupé · touchez pour l'activer</div>
+          <h3>Une alerte, en cinq temps.</h3>
+          <p>Plutôt que de vous l'expliquer, on vous la montre. Touchez une étape pour la voir à l'écran : l'alerte qui part, ce que reçoivent vos proches, puis votre position qui s'affiche en direct sur une carte.</p>
+          <div class="demo-note">Écran principal et page de suivi : captures réelles</div>
         </div>
 
-        <ul class="steps" id="steps">
-          <li class="step reveal">
+        <ol class="steps" id="steps">
+          <li class="step reveal" tabindex="0">
             <span class="num">1</span>
             <div>
-              <h3>Déclenchement discret <span class="tag">Sans sortir le téléphone</span></h3>
-              <p>Trois appuis sur le bouton latéral, téléphone verrouillé au fond de la poche — configuré une fois à l'installation. À l'écran, une simple app météo comme si de rien n'était.</p>
+              <h3>Vous déclenchez l'alerte <span class="tag">Sans sortir le téléphone</span></h3>
+              <p>Un geste discret, téléphone verrouillé au fond de la poche — configuré une fois à l'installation — ou un appui maintenu sur le bouton d'alerte. À l'écran, une simple app météo comme si de rien n'était.</p>
             </div>
           </li>
-          <li class="step reveal">
+          <li class="step reveal" tabindex="0">
             <span class="num">2</span>
             <div>
-              <h3>Vos contacts de confiance sont prévenus</h3>
-              <p>Vos proches choisis reçoivent le lien de suivi et voient votre position en temps réel — pendant que votre écran reste neutre.</p>
+              <h3>L'alerte part vers vos contacts de confiance</h3>
+              <p>Vos proches choisis sont prévenus — pendant que votre écran reste neutre. Votre position commence à être partagée.</p>
             </div>
           </li>
-          <li class="step reveal">
+          <li class="step reveal" tabindex="0">
             <span class="num">3</span>
+            <div>
+              <h3>Vos proches reçoivent une notification ou un lien</h3>
+              <p>S'ils ont Seeker, une notification, même téléphone verrouillé. Sinon, le lien de suivi par SMS, que vous envoyez depuis l'écran d'alerte : ils n'ont rien à installer pour l'ouvrir.</p>
+            </div>
+          </li>
+          <li class="step reveal" tabindex="0">
+            <span class="num">4</span>
+            <div>
+              <h3>Ils voient où vous êtes, sur une carte</h3>
+              <p>Vos proches reçoivent le lien de suivi et voient votre position en temps réel.</p>
+            </div>
+          </li>
+          <li class="step reveal" tabindex="0">
+            <span class="num">5</span>
             <div>
               <h3>Suivi pendant 1 heure, prolongeable</h3>
               <p>Votre position est partagée en direct pendant 60 minutes, prolongeable si besoin, même écran verrouillé. Et avec le mode trajet, l'alerte part toute seule si vous ne confirmez pas votre arrivée à l'heure prévue.</p>
             </div>
           </li>
-        </ul>
+        </ol>
       </div>
     </div>
   </div>
@@ -780,6 +918,13 @@
       </div>
       <p class="demo-foot">Captures réelles de l'application.</p>
     </div>
+  </div>
+</section>
+
+<section class="creed" aria-label="Notre conviction">
+  <div class="wrap">
+    <span class="label reveal">Notre conviction</span>
+    <blockquote class="creed-q reveal" id="creed">On ne devrait jamais avoir à choisir entre vivre librement et <em>rassurer ceux qu'on aime.</em></blockquote>
   </div>
 </section>
 
@@ -858,7 +1003,7 @@
         <div class="permonth">Pour toujours</div>
         <ul>
           <li class="head">L'essentiel :</li>
-          <li>✓ Déclenchement discret (3× bouton latéral)</li>
+          <li>✓ Déclenchement discret (3× bouton sur Android, bouton Action ou toucher arrière sur iPhone)</li>
           <li>✓ 1 contact de confiance</li>
           <li>✓ Suivi de position 60 min</li>
           <li>✓ Écran leurre + faux appel</li>
@@ -917,7 +1062,7 @@
       </div>
     </div>
 
-    <p class="pricing-note">Paiement sécurisé via Google Play. <b>Prix de lancement</b> — les inscrit·e·s de la liste d'attente en profiteront en premier.</p>
+    <p class="pricing-note">Paiement sécurisé via l'App Store et Google Play. <b>Prix de lancement</b> — les inscrit·e·s de la liste d'attente en profiteront en premier.</p>
   </div>
 </section>
 
@@ -972,7 +1117,7 @@
       </details>
       <details>
         <summary>Comment déclencher l'alerte sans sortir mon téléphone ?</summary>
-        <div class="a">Sur Android, par trois appuis rapides sur le bouton marche/arrêt, téléphone verrouillé au fond de la poche. Une double vibration confirme que l'alerte est partie. Ce geste s'active une seule fois, dans les réglages. Vous pouvez aussi maintenir le bouton d'alerte dans l'application.</div>
+        <div class="a">Sur Android, par trois appuis rapides sur le bouton marche/arrêt, téléphone verrouillé au fond de la poche ; une double vibration confirme que l'alerte est partie. Sur iPhone, par le bouton Action ou un double toucher à l'arrière du téléphone. Ce geste se configure une seule fois, dans les réglages. Vous pouvez aussi maintenir le bouton d'alerte dans l'application.</div>
       </details>
       <details>
         <summary>Puis-je essayer sans alerter personne ?</summary>
@@ -1000,11 +1145,11 @@
       </details>
       <details>
         <summary>Combien ça coûte, et puis-je arrêter quand je veux ?</summary>
-        <div class="a">L'essentiel est gratuit, pour toujours. Seeker+ coûte 4,99 € par mois ou 39,99 € par an ; Famille &amp; Amis, 7,99 € par mois ou 69,99 € par an pour cinq comptes ; Famille &amp; Amis 10, 12,99 € par mois ou 119,99 € par an pour dix comptes. C'est sans engagement et résiliable à tout moment. Le paiement passe par Google Play.</div>
+        <div class="a">L'essentiel est gratuit, pour toujours. Seeker+ coûte 4,99 € par mois ou 39,99 € par an ; Famille &amp; Amis, 7,99 € par mois ou 69,99 € par an pour cinq comptes ; Famille &amp; Amis 10, 12,99 € par mois ou 119,99 € par an pour dix comptes. C'est sans engagement et résiliable à tout moment. Le paiement passe par l'App Store ou Google Play.</div>
       </details>
       <details>
         <summary>Sur quels téléphones Seeker sera-t-il disponible ?</summary>
-        <div class="a">Seeker arrive d'abord sur Android, en Belgique francophone puis en France. L'application existe en français et en néerlandais. Inscrivez-vous à la liste ci-dessous pour être prévenu·e du lancement.</div>
+        <div class="a">Seeker arrive bientôt sur Android et iOS, avec les mêmes fonctionnalités sur les deux, en Belgique francophone puis en France. L'application existe en français et en néerlandais. Inscrivez-vous à la liste ci-dessous pour être prévenu·e du lancement.</div>
       </details>
       <details>
         <summary>Puis-je supprimer mon compte ?</summary>
@@ -1019,7 +1164,7 @@
     <div class="reveal">
       <span class="label"><b>09</b>Accès anticipé</span>
       <h2>On construit Seeker avec les premières personnes qui s'inscrivent.</h2>
-      <p>Aucun spam. Quelques e-mails avant le lancement en Belgique, l'accès aux premiers tests et le prix de lancement garanti.</p>
+      <p><strong style="color:var(--ink);font-weight:500">Seeker arrive bientôt sur Android et iOS.</strong> Aucun spam. Quelques e-mails avant le lancement en Belgique, l'accès aux premiers tests et le prix de lancement garanti.</p>
     </div>
     <form id="waitlist-form" class="reveal">
       <div class="row">
@@ -1047,6 +1192,7 @@
         <a href="confidentialite.html" style="color:var(--dim);text-decoration:none">Confidentialité</a>
         <a href="cgu.html" style="color:var(--dim);text-decoration:none">CGU</a>
         <button class="replay" id="intro-replay" type="button">Revoir l'introduction</button>
+        <span>Bientôt sur Android et iOS</span>
         <span>Estaimpuis / Mouscron · © 2026</span>
       </span>
     </div>
@@ -1146,20 +1292,55 @@ function setBilling(mode){
   }
   addEventListener('scroll', onScroll, {passive:true}); onScroll();
 
-  /* Étapes : celle qui passe au centre de l'écran s'allume, le fil se remplit */
+  /* L'alerte en cinq temps : chaque étape affiche son écran dans le téléphone. */
   var steps = [].slice.call(document.querySelectorAll('#steps .step')), list = document.getElementById('steps');
-  if(steps.length && 'IntersectionObserver' in window){
-    var so = new IntersectionObserver(function(es){
-      es.forEach(function(e){
-        if(!e.isIntersecting) return;
-        var i = steps.indexOf(e.target);
-        steps.forEach(function(s, k){ s.classList.toggle('active', k <= i); });
-        list.style.setProperty('--fill', steps.length > 1 ? i / (steps.length - 1) : 1);
+  var flow = document.getElementById('flow'), cap = document.getElementById('flow-cap');
+  if(steps.length && flow){
+    var shots = [].slice.call(flow.querySelectorAll('.fs')), at = 0, ft = 0, manual = false, inView = false;
+    var goStep = function(i){
+      at = i;
+      steps.forEach(function(st, k){ st.classList.toggle('active', k <= i); });
+      list.style.setProperty('--fill', i / (steps.length - 1));
+      shots.forEach(function(el){ el.classList.toggle('on', (' ' + el.getAttribute('data-step') + ' ').indexOf(' ' + i + ' ') >= 0); });
+      flow.setAttribute('data-at', i);
+      var h = steps[i].querySelector('h3').firstChild;
+      if(cap) cap.innerHTML = '<b>' + (i + 1) + ' / ' + steps.length + '</b>' + (h ? h.textContent.trim() : '');
+    };
+    var planStep = function(){
+      clearTimeout(ft);
+      if(reduced || manual || !inView) return;
+      ft = setTimeout(function(){ goStep((at + 1) % steps.length); planStep(); }, 3800);
+    };
+    steps.forEach(function(st, i){
+      var pick = function(){ manual = true; clearTimeout(ft); goStep(i); };
+      st.addEventListener('click', pick);
+      st.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); pick(); } });
+    });
+    goStep(0);
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){ inView = es[0].isIntersecting; planStep(); }, {threshold:0.35}).observe(flow);
+    }
+  }
+
+  /* La conviction : la phrase est découpée en mots, qui se posent un à un. */
+  var creed = document.getElementById('creed');
+  if(creed){
+    var n = 0;
+    var split = function(node){
+      [].slice.call(node.childNodes).forEach(function(c){
+        if(c.nodeType === 3){
+          var frag = document.createDocumentFragment();
+          c.textContent.split(/(\s+)/).forEach(function(part){
+            if(!part) return;
+            if(/^\s+$/.test(part)){ frag.appendChild(document.createTextNode(' ')); return; }
+            var w = document.createElement('span'); w.className = 'w'; w.style.setProperty('--i', n++); w.textContent = part;
+            frag.appendChild(w);
+          });
+          node.replaceChild(frag, c);
+        } else if(c.nodeType === 1) split(c);
       });
-    }, {rootMargin:'-45% 0px -45% 0px', threshold:0});
-    steps.forEach(function(s){ so.observe(s); });
-  } else {
-    steps.forEach(function(s){ s.classList.add('active'); });
+    };
+    split(creed);
   }
 
   /* Le téléphone de l'introduction s'incline vers la souris */
