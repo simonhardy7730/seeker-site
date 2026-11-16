@@ -75,7 +75,7 @@
          1. l'introduction ............ accueillir
          2. l'objet du hero ........... la protection, puis le signal
          3. la carte .................. vous au centre, vos proches reliés à vous
-         4. l'alerte en cinq temps .... ce qui se passe, écran par écran
+         4. l'alerte en cinq temps .... la scène 3D : ce qui se passe, étape par étape
          5. l'écran de démonstration .. montrer la vraie interface
        Le reste apparaît simplement, une fois, sans effet.
      ===================================================================== */
@@ -235,7 +235,8 @@
   /* 03 — FONCTIONNEMENT */
   .section-head{max-width:860px;margin-bottom:76px}
   .section-head h2{margin-top:22px}
-  .how{display:grid;grid-template-columns:minmax(240px,300px) 1fr;gap:96px;align-items:start}
+  .how{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);gap:72px;align-items:start}
+  .how > *{min-width:0}
   .phone-stage{position:sticky;top:110px}
   .phone{border-radius:38px;overflow:hidden;position:relative;border:1px solid rgba(238,241,246,0.18);background:#0a1120;padding:8px;
     box-shadow:0 50px 100px -40px rgba(0,0,0,0.9)}
@@ -287,7 +288,35 @@
   .fs-track .mk.time{left:50.2%;top:89.4%;width:46.2%;height:9.6%;border-radius:2px}
   .flow[data-at="3"] .mk.pos{opacity:1;animation:press 2s ease-out infinite}
   .flow[data-at="4"] .mk.time{opacity:1}
-  .flow-cap{font-family:var(--mono);font-size:11px;letter-spacing:0.08em;color:var(--dim);text-align:center;margin-top:16px;min-height:2.6em}
+  /* La scène 3D : même récit, en profondeur. */
+  .scene{display:none;position:relative;aspect-ratio:5/4;margin:-10px -30px 0;
+    -webkit-mask-image:linear-gradient(to right,transparent,#000 10%,#000 90%,transparent),linear-gradient(to bottom,#000 84%,transparent);-webkit-mask-composite:source-in;
+    mask-image:linear-gradient(to right,transparent,#000 10%,#000 90%,transparent),linear-gradient(to bottom,#000 84%,transparent);mask-composite:intersect}
+  .scene-on .scene{display:block}
+  .scene-on .flow-fallback{display:none}
+  .flow-fallback{max-width:300px;margin:0 auto}
+  .scene canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .scene-tag{position:absolute;left:0;top:0;font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--dim);
+    white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .6s}
+  .scene-timer{position:absolute;right:11%;bottom:9%;text-align:right;font-family:var(--mono);opacity:0;transform:translateY(-6px);transition:opacity .7s var(--ease), transform .7s var(--ease);pointer-events:none}
+  .scene-timer.on{opacity:1;transform:none}
+  .scene-timer span,.scene-timer i{display:block;font-style:normal;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--dim)}
+  .scene-timer b{display:block;font-family:var(--serif);font-weight:300;font-size:40px;line-height:1.1;letter-spacing:-0.01em;color:var(--gold-bright);font-variant-numeric:tabular-nums}
+  .flow-ctl{display:flex;align-items:center;gap:6px;margin-top:18px}
+  .flow-ctl button{appearance:none;-webkit-appearance:none;background:none;border:1px solid var(--line);color:var(--silver);font-family:var(--mono);font-size:11px;
+    letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;height:44px;border-radius:3px;transition:border-color .2s, color .2s}
+  .flow-ctl button:hover{border-color:var(--gold);color:var(--gold-bright)}
+  .fc-nav{width:44px;font-size:15px !important}
+  .fc-play{display:inline-flex;align-items:center;gap:10px;padding:0 16px;min-width:118px}
+  .fc-play i{width:9px;height:11px;border-left:3px solid currentColor;border-right:3px solid currentColor;box-sizing:border-box}
+  .fc-play.paused i{width:0;height:0;border:6px solid transparent;border-left:10px solid currentColor;border-right:0}
+  .fc-dots{display:flex;gap:6px;margin-left:auto;flex:1 1 0;min-width:0;justify-content:flex-end}
+  .flow-ctl .fc-dot{flex:0 1 30px;min-width:0;height:44px;border:none;border-radius:0;position:relative;padding:0}
+  .fc-dot::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;background:var(--line);transition:background .4s}
+  .fc-dot.done::before{background:var(--gold-deep)}
+  .fc-dot.now::before{background:var(--gold-bright)}
+  .flow-note{font-size:12.5px;color:var(--dim);text-align:left;margin-top:6px}
+  .flow-cap{font-family:var(--mono);font-size:11px;letter-spacing:0.08em;color:var(--dim);text-align:left;margin-top:16px;min-height:2.6em}
   .flow-cap b{color:var(--gold);font-weight:400;margin-right:8px}
   .step{cursor:pointer}
   .step:focus-visible{outline:1px solid var(--gold);outline-offset:6px}
@@ -566,8 +595,12 @@
     .section-head{margin-bottom:44px}
     .creed{padding:104px 0 112px}
     .flow{border-radius:24px}
-    .how{grid-template-columns:1fr;gap:40px}
-    .phone-stage{position:static;max-width:240px;margin:0 auto}
+    .how{grid-template-columns:minmax(0,1fr);gap:40px}
+    .phone-stage{position:static}
+    .flow-fallback{max-width:240px}
+    .scene{aspect-ratio:4/5;margin:0 -22px}
+    .scene-timer b{font-size:32px}
+    .fc-play{min-width:104px;padding:0 12px}
     /* Sur téléphone, les fonctions deviennent des pastilles au-dessus de
        l'écran : on touche et on voit le changement sans avoir à défiler. */
     .demo2{grid-template-columns:1fr;gap:20px}
@@ -792,8 +825,16 @@
     </div>
 
     <div class="how">
-      <div class="phone-stage reveal">
-        <div class="phone">
+      <div class="phone-stage reveal" id="flow-stage">
+        <!-- La scène 3D. Elle ne s'affiche que si elle a pu démarrer ; sinon le
+             téléphone ci-dessous (mêmes cinq écrans) reste en place. -->
+        <div class="scene" id="scene" role="img" aria-label="Illustration animée : un téléphone déclenche une alerte Seeker, celui d'un proche reçoit la notification, puis la position s'affiche sur une carte pendant une heure">
+          <canvas id="scene-gl" aria-hidden="true"></canvas>
+          <span class="scene-tag" id="scene-tag-a" aria-hidden="true">Vous</span>
+          <span class="scene-tag" id="scene-tag-b" aria-hidden="true">Votre proche</span>
+          <div class="scene-timer" id="scene-timer" aria-hidden="true"><span>Suivi actif</span><b>60:00</b><i>prolongeable</i></div>
+        </div>
+        <div class="phone flow-fallback">
           <div class="flow" id="flow" data-at="0">
             <div class="fs on" data-step="0">
               <img src="assets/app-alerte.jpg" alt="Écran principal de Seeker : le bouton d'alerte" loading="lazy" width="540" height="1170" />
@@ -828,7 +869,14 @@
             </div>
           </div>
         </div>
+        <div class="flow-ctl" id="flow-ctl">
+          <button type="button" class="fc-nav" id="flow-prev" aria-label="Étape précédente">←</button>
+          <button type="button" class="fc-play" id="flow-play" aria-label="Mettre la démonstration en pause"><i aria-hidden="true"></i><span>Pause</span></button>
+          <button type="button" class="fc-nav" id="flow-next" aria-label="Étape suivante">→</button>
+          <div class="fc-dots" id="flow-dots"></div>
+        </div>
         <p class="flow-cap" id="flow-cap" aria-hidden="true"></p>
+        <p class="flow-note">Illustration du fonctionnement — aucune alerte n'est envoyée depuis cette page.</p>
       </div>
 
       <div>
@@ -1296,29 +1344,53 @@ function setBilling(mode){
   var steps = [].slice.call(document.querySelectorAll('#steps .step')), list = document.getElementById('steps');
   var flow = document.getElementById('flow'), cap = document.getElementById('flow-cap');
   if(steps.length && flow){
-    var shots = [].slice.call(flow.querySelectorAll('.fs')), at = 0, ft = 0, manual = false, inView = false;
+    var shots = [].slice.call(flow.querySelectorAll('.fs')), at = 0, ft = 0, playing = !reduced, inView = false;
+    var playBtn = document.getElementById('flow-play'), dotsBox = document.getElementById('flow-dots'), dots = [];
     var goStep = function(i){
       at = i;
-      steps.forEach(function(st, k){ st.classList.toggle('active', k <= i); });
+      steps.forEach(function(st, k){ st.classList.toggle('active', k <= i); st.setAttribute('aria-current', k === i ? 'step' : 'false'); });
       list.style.setProperty('--fill', i / (steps.length - 1));
       shots.forEach(function(el){ el.classList.toggle('on', (' ' + el.getAttribute('data-step') + ' ').indexOf(' ' + i + ' ') >= 0); });
+      dots.forEach(function(d, k){ d.classList.toggle('now', k === i); d.classList.toggle('done', k < i); });
       flow.setAttribute('data-at', i);
       var h = steps[i].querySelector('h3').firstChild;
       if(cap) cap.innerHTML = '<b>' + (i + 1) + ' / ' + steps.length + '</b>' + (h ? h.textContent.trim() : '');
+      /* la scène 3D, si elle est chargée, suit la même étape */
+      try{ document.dispatchEvent(new CustomEvent('seeker:step', {detail:i})); }catch(e){}
     };
     var planStep = function(){
       clearTimeout(ft);
-      if(reduced || manual || !inView) return;
-      ft = setTimeout(function(){ goStep((at + 1) % steps.length); planStep(); }, 3800);
+      if(!playing || !inView) return;
+      ft = setTimeout(function(){ goStep((at + 1) % steps.length); planStep(); }, 5200);
     };
+    var setPlaying = function(on){
+      playing = on;
+      if(playBtn){
+        playBtn.classList.toggle('paused', !on);
+        playBtn.setAttribute('aria-label', on ? 'Mettre la démonstration en pause' : 'Relancer la démonstration');
+        playBtn.querySelector('span').textContent = on ? 'Pause' : 'Lecture';
+      }
+      planStep();
+    };
+    /* choisir une étape à la main arrête le défilement : on a le temps de lire */
+    var pickStep = function(i){ goStep((i + steps.length) % steps.length); setPlaying(false); };
     steps.forEach(function(st, i){
-      var pick = function(){ manual = true; clearTimeout(ft); goStep(i); };
-      st.addEventListener('click', pick);
-      st.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); pick(); } });
+      st.addEventListener('click', function(){ pickStep(i); });
+      st.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); pickStep(i); } });
+      if(dotsBox){
+        var d = document.createElement('button'); d.type = 'button'; d.className = 'fc-dot';
+        d.setAttribute('aria-label', 'Étape ' + (i + 1) + ' sur ' + steps.length);
+        d.addEventListener('click', function(){ pickStep(i); });
+        dotsBox.appendChild(d); dots.push(d);
+      }
     });
-    goStep(0);
+    if(playBtn) playBtn.addEventListener('click', function(){ setPlaying(!playing); });
+    var prevBtn = document.getElementById('flow-prev'), nextBtn = document.getElementById('flow-next');
+    if(prevBtn) prevBtn.addEventListener('click', function(){ pickStep(at - 1); });
+    if(nextBtn) nextBtn.addEventListener('click', function(){ pickStep(at + 1); });
+    goStep(0); setPlaying(playing);
     if('IntersectionObserver' in window){
-      new IntersectionObserver(function(es){ inView = es[0].isIntersecting; planStep(); }, {threshold:0.35}).observe(flow);
+      new IntersectionObserver(function(es){ inView = es[0].isIntersecting; planStep(); }, {threshold:0.3}).observe(document.getElementById('flow-stage'));
     }
   }
 
@@ -1625,5 +1697,35 @@ if(canvas && !weak && hasWebGL()){
 }
 </script>
 
+<!-- =====================================================================
+     SCÈNE 3D DE « UNE ALERTE, EN CINQ TEMPS »
+     Le fichier assets/scene3d.js n'est téléchargé que lorsque la section
+     approche de l'écran, et seulement si l'appareil peut l'afficher.
+     Sinon — pas de WebGL, économie de données, animations réduites, ou
+     simple échec de chargement — le téléphone à cinq écrans reste en place.
+     ===================================================================== -->
+<script type="module">
+(function(){
+  const stage = document.getElementById('flow-stage'), canvas = document.getElementById('scene-gl'), flow = document.getElementById('flow');
+  if(!stage || !canvas || !flow || !('IntersectionObserver' in window)) return;
+  const conn = navigator.connection || {};
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if(conn.saveData === true || (navigator.deviceMemory && navigator.deviceMemory <= 2)) return;
+  try{ const c = document.createElement('canvas'); if(!(c.getContext('webgl2') || c.getContext('webgl'))) return; }catch(e){ return; }
+
+  let asked = false;
+  const io = new IntersectionObserver(es => {
+    if(asked || !es[0].isIntersecting) return;
+    asked = true; io.disconnect();
+    /* la scène a besoin d'une taille pour dessiner sa première image */
+    stage.classList.add('scene-on');
+    import('./assets/scene3d.js')
+      .then(m => m.start({canvas, host:flow, timer:document.getElementById('scene-timer'),
+                          labels:[document.getElementById('scene-tag-a'), document.getElementById('scene-tag-b')]}))
+      .catch(() => { stage.classList.remove('scene-on'); });
+  }, {rootMargin:'900px 0px'});
+  io.observe(stage);
+})();
+</script>
 </body>
 </html>
